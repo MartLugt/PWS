@@ -68,7 +68,7 @@ First, find where it says Git: master in the bottom right corner. Click it, sele
 You are now editing that branch. The files in this branch might be different than master, so make sure to select the right branch before starting.
 
 Now just do what you would normally do, but make sure you are in the right branch when committing. 
-
+ 
 When the branch is done and tested, merge it with master.
 
 
