@@ -4,7 +4,7 @@ import speech_recognition as sr
 
 # obtain path to "english.wav" in the same folder as this script
 from os import path
-AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "Test02En.wav")
+AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "Test03En.wav")
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "french.aiff")
 # AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "chinese.flac")
 
