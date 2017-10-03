@@ -21,6 +21,7 @@ buffer = stream.read(22050) #half a second
 threshold = audioop.rms(buffer, pa.get_sample_size(pyaudio.paInt16)) + 200
 
 frames = []
+counterThreshold = 0    #TODO: give this a better name
 
 while True:     #TODO: make this less fast. Give a cooldown
     buffer = stream.read(1024)
@@ -29,11 +30,15 @@ while True:     #TODO: make this less fast. Give a cooldown
         frames.append(buffer)
         while True:
             buffer = stream.read(1024)
+            frames.append(buffer)
             level = audioop.rms(buffer, pa.get_sample_size(pyaudio.paInt16))
             if level > threshold:
-                frames.append(buffer)
+                counterThreshold = 0
             else:
+                counterThreshold += 1       #TODO: cut out empty buffers after break
+            if counterThreshold > 43:
                 break
+
         break
 
 print("Recording is done")
