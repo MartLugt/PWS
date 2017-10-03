@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
-import pyaudio
-import wave
+import pyaudio  #pyaudio for recording
+import wave     #wave for creating .wav file
+import audioop  #audioOperations for checking volume of sound
+
 
 #First create the PyAudio object
 pa = pyaudio.PyAudio()
@@ -14,11 +16,25 @@ stream = pa.open(format = pyaudio.paInt16,
                  frames_per_buffer = 1024)
 
 print("We are now recording")
+print("First be silent, calibrating silence")
+buffer = stream.read(22050) #half a second
+threshold = audioop.rms(buffer, pa.get_sample_size(pyaudio.paInt16)) + 200
 
 frames = []
 
-for i in range(0, int(44100 / 1024 * 5)) :  #Why do we need this???? (rate / buffersize * record seconds)
-    frames.append(stream.read(1024))
+while True:     #TODO: make this less fast. Give a cooldown
+    buffer = stream.read(1024)
+    level = audioop.rms(buffer, pa.get_sample_size(pyaudio.paInt16))
+    if level > threshold:
+        frames.append(buffer)
+        while True:
+            buffer = stream.read(1024)
+            level = audioop.rms(buffer, pa.get_sample_size(pyaudio.paInt16))
+            if level > threshold:
+                frames.append(buffer)
+            else:
+                break
+        break
 
 print("Recording is done")
 
@@ -34,3 +50,4 @@ wa.writeframes(b''.join(frames))
 wa.close()
 
 print("Done. Recorded to file.")
+
