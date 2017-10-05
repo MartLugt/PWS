@@ -6,9 +6,9 @@ import os
 import subprocess
 import wave  # wave for creating .wav file
 from urllib.parse import urlencode
-from urllib.request import Request, urlopen
 
 import pyaudio  # pyaudio for recording
+import requests
 
 # TODO: change all mixedCase variable names to lower_case
 
@@ -24,7 +24,7 @@ def get_wav(frames, format, rate):
     with io.BytesIO() as file:
         wa = wave.open(file, 'w')
         wa.setnchannels(1)
-        wa.setsampwidth(pa.get_sample_size(format))
+        wa.setsampwidth(2)
         wa.setframerate(rate)
         wa.writeframes(b''.join(frames))
         wavValue = file.getvalue()
@@ -54,27 +54,23 @@ def get_google(flac_data, rate, language="en-US"):
         "key": "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw",
     }))
 
-    request = Request(url, data=flac_data, headers={"Content-Type": "audio/x-flac; rate={}".format(rate)})
-    response = urlopen(request, timeout=99)
-    text = response.read().decode("utf-8")
-    return text
+    headers = {"Content-Type": "audio/x-flac; rate={}".format(rate)}
+    r = requests.post(url, headers=headers, data=flac_data)
+    return r.text
 
 
 def get_wit(wav_data, language="en-US"):
-    url = "https://api.wit.ai/speech?v=4102017"
+    url = "https://api.wit.ai/speech"
     if language == "en-US":
         key = "EZ7V7OXWF7TURDDTFCYAM2DWLBX2OAIT"
     elif language == "nl-NL":
         key = "57UW2OZP2T3YMJTQK7CHRBCQM5QGWPNJ"
     else:
         key = None
-    print(key)
-    request = Request(url, data=wav_data,
-                      headers={"Authorization": "Bearer {}".format(key), "Content-Type": "audio/wav"})
-    response = urlopen(request, timeout=99)
-
-    text = response.read().decode("utf-8")
-    return text
+    headers = {"Authorization": "Bearer " + key, 'accept': 'application/vnd.wit.' + str(5102017) + '+json',
+               "Content-Type": "audio/wav"}
+    r = requests.post(url, data=wav_data, headers=headers)
+    return r.text
 
 #First create the PyAudio object
 pa = pyaudio.PyAudio()
@@ -130,5 +126,25 @@ pa.terminate()       #Destroy the PyAudio object
 wav_data = get_wav(frames, FORMAT, RATE)
 flac_data = get_flac(wav_data)
 
-print(get_google(flac_data, RATE, "en-US"))
-print(get_wit(wav_data))
+
+def goog(flac_data):
+    result = get_google(flac_data, RATE, "nl-NL")
+    print(result)
+
+
+def wit(wav_data):
+    result = get_wit(wav_data, language="nl-NL")
+    print(result)
+
+
+#
+# import timeit
+#
+# t = timeit.Timer("goog(flac_data)", "from __main__ import goog, " + ",".join(globals()))
+# print(t.timeit(10))
+#
+# t = timeit.Timer("wit(wav_data)", "from __main__ import wit, " + ",".join(globals()))
+# print(t.timeit(10))
+#
+goog(flac_data)
+wit(wav_data)
