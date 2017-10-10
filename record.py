@@ -47,6 +47,21 @@ def get_flac(wav_data):
     return flac_data
 
 
+def get_flac_pi(wav_data):
+    base_path = "/usr/bin"
+    flac_converter = os.path.join(base_path,
+                                  "flac")  # FOR PI.
+    process = subprocess.Popen([
+        flac_converter,
+        "--stdout", "--totally-silent",
+        # put the resulting FLAC file in stdout, and make sure it's not mixed with any program output
+        "--best",  # highest level of compression available
+        "-",  # the input FLAC file contents will be given in stdin
+    ], stdin=subprocess.PIPE, stdout=subprocess.PIPE, startupinfo=None)
+    flac_data, stderr = process.communicate(wav_data)
+    return flac_data
+
+
 def get_google(flac_data, rate, language="en-US"):
     url = "http://www.google.com/speech-api/v2/recognize?{}".format(urlencode({
         "client": "chromium",
@@ -128,12 +143,12 @@ flac_data = get_flac(wav_data)
 
 
 def goog(flac_data):
-    result = get_google(flac_data, RATE, "nl-NL")
+    result = get_google(flac_data, RATE, "en-US")
     print(result)
 
 
 def wit(wav_data):
-    result = get_wit(wav_data, language="nl-NL")
+    result = get_wit(wav_data, language="en-US")
     print(result)
 
 
