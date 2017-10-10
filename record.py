@@ -2,6 +2,7 @@
 
 import audioop  # audioOperations for checking volume of sound
 import io
+import json
 import os
 import subprocess
 import wave  # wave for creating .wav file
@@ -10,15 +11,19 @@ from urllib.parse import urlencode
 import pyaudio  # pyaudio for recording
 import requests
 
-# TODO: change all mixedCase variable names to lower_case
+# Add comments explaining why, not what!!
 
-#Set constants
+# Set constants
 FORMAT = pyaudio.paInt16
-LIB = pyaudio.paALSA
 RATE = 44100
-BUFFER_SIZE = 4096 
-START_COOLDOWN = 9
-STOP_COOLDOWN = 21
+BUFFER_SIZE = 4096
+START_COOLDOWN = int(RATE / BUFFER_SIZE * 0.2)  # In seconds
+STOP_COOLDOWN = int(RATE / BUFFER_SIZE * 0.75)  # In seconds
+DEVICE_INDEX = 0  # 2, needs to be 0 for windows, use audio_devices.py to determine right index
+
+
+class UnknownValueError(Exception):
+    pass
 
 
 def get_wav(frames, format, rate):
@@ -28,15 +33,14 @@ def get_wav(frames, format, rate):
         wa.setsampwidth(2)
         wa.setframerate(rate)
         wa.writeframes(b''.join(frames))
-        wavValue = file.getvalue()
+        wav_value = file.getvalue()
         wa.close()
-    return wavValue
+    return wav_value
 
 
 def get_flac(wav_data):
     base_path = "C:\\Users\martv\AppData\Local\Programs\Python\Python35\Lib\site-packages\speech_recognition\\"
-    flac_converter = os.path.join(base_path,
-                                  "flac-win32.exe")  # FOR WINDOWS. WHEN PORTING TO PI, CHANGE THE WHOLE WAV TO FLAC CONVERSION
+    flac_converter = os.path.join(base_path, "flac-win32.exe")  # For Windows x86 and x86-64.
     process = subprocess.Popen([
         flac_converter,
         "--stdout", "--totally-silent",
@@ -50,8 +54,7 @@ def get_flac(wav_data):
 
 def get_flac_pi(wav_data):
     base_path = "/usr/bin"
-    flac_converter = os.path.join(base_path,
-                                  "flac")  # FOR PI.
+    flac_converter = os.path.join(base_path, "flac")  # FOR PI.
     process = subprocess.Popen([
         flac_converter,
         "--stdout", "--totally-silent",
@@ -71,8 +74,29 @@ def get_google(flac_data, rate, language="en-US"):
     }))
 
     headers = {"Content-Type": "audio/x-flac; rate={}".format(rate)}
-    r = requests.post(url, headers=headers, data=flac_data)
-    return r.text
+    response = requests.post(url, headers=headers, data=flac_data)
+    # Now parse it into the sentence with the best confidence
+    print(response.text)
+
+    result_full = []
+    for line in response.text.split('\n'):
+        if line == "":
+            continue
+        r = json.loads(line)["result"]
+        if r:
+            result_full = r[0]
+
+    if not isinstance(result_full, dict):
+        raise UnknownValueError()
+
+    if "alternative" in result_full["alternative"]:
+        result_best = max(result_full["alternative"], key=lambda alternative: alternative["confidence"])
+        if lambda alternative: alternative["confidence"] < 0.7:
+            print("not confident; confidence < 0,7")
+    else:
+        result_best = result_full["alternative"][0]
+        print("not confident; no confidence info")
+    return result_best["transcript"]
 
 
 def get_wit(wav_data, language="en-US"):
@@ -88,80 +112,64 @@ def get_wit(wav_data, language="en-US"):
     r = requests.post(url, data=wav_data, headers=headers)
     return r.text
 
-#First create the PyAudio object
+
+# First create the PyAudio object
 pa = pyaudio.PyAudio()
 
-#Create a stream for recording
-stream = pa.open(input_device_index = 2,
-                 format = FORMAT,
-                 channels = 1,
-                 rate = RATE,
-                 input = True,
-                 frames_per_buffer = BUFFER_SIZE)
+# Create a stream for recording
+stream = pa.open(input_device_index=DEVICE_INDEX,
+                 format=FORMAT,
+                 channels=1,
+                 rate=RATE,
+                 input=True,
+                 frames_per_buffer=BUFFER_SIZE)
 
 print("First be silent, calibrating silence")
-buffer = stream.read(int(RATE / 2)) #half a second
+buffer = stream.read(int(RATE / 2))  # half a second
 threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) + 200
 
 print("We are now recording. Start talking for it to start.")
 
 frames = []
-counterThreshold = 0    #TODO: give this a better name
-counterThreshold1 = 0   #TODO: give this a better name too
+counter_threshold_stop = 0
+counter_threshold_start = 0
 
-#If sound has been above threshold for n buffers, continue up the loop
+# If sound has been above threshold for n buffers, continue up the loop
 
-while True:     #TODO: make this less fast. Give a cooldown
+while True:
     buffer = stream.read(BUFFER_SIZE)
     level = audioop.rms(buffer, pa.get_sample_size(FORMAT))
     if level > threshold:
-        counterThreshold1 += 1
+        counter_threshold_start += 1
         frames.append(buffer)
     else:
-        counterThreshold1 = 0
+        counter_threshold_start = 0
 
-    if counterThreshold1 > START_COOLDOWN:
+    if counter_threshold_start > START_COOLDOWN:
         print("Recording Activated")
         while True:
             buffer = stream.read(BUFFER_SIZE)
             frames.append(buffer)
             level = audioop.rms(buffer, pa.get_sample_size(FORMAT))
             if level > threshold:
-                counterThreshold = 0
+                counter_threshold_stop = 0
             else:
-                counterThreshold += 1       #TODO: cut out empty buffers after break
-            if counterThreshold > STOP_COOLDOWN:
+                counter_threshold_stop += 1  # TODO: cut out empty buffers after break
+            if counter_threshold_stop > STOP_COOLDOWN:
                 break
         break
 
 print("Recording is done")
 
-stream.stop_stream() #Stop and close the stream
+stream.stop_stream()  # Stop and close the stream
 stream.close()
-pa.terminate()       #Destroy the PyAudio object
+pa.terminate()  # Destroy the PyAudio object
 
 wav_data = get_wav(frames, FORMAT, RATE)
-flac_data = get_flac_pi(wav_data)
+flac_data = get_flac(wav_data)
 
+result_google = get_google(flac_data, RATE, "en-US")
+print(result_google)
 
-def goog(flac_data):
-    result = get_google(flac_data, RATE, "en-US")
-    print(result)
-
-
-def wit(wav_data):
-    result = get_wit(wav_data, language="en-US")
-    print(result)
-
-
-#
-# import timeit
-#
-# t = timeit.Timer("goog(flac_data)", "from __main__ import goog, " + ",".join(globals()))
-# print(t.timeit(10))
-#
-# t = timeit.Timer("wit(wav_data)", "from __main__ import wit, " + ",".join(globals()))
-# print(t.timeit(10))
-#
-goog(flac_data)
-wit(wav_data)
+result_wit = get_wit(wav_data, language="en-US")
+print(result_wit)
