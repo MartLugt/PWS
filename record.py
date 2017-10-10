@@ -14,8 +14,9 @@ import requests
 
 #Set constants
 FORMAT = pyaudio.paInt16
+LIB = pyaudio.paALSA
 RATE = 44100
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 4096 
 START_COOLDOWN = 9
 STOP_COOLDOWN = 21
 
@@ -91,7 +92,8 @@ def get_wit(wav_data, language="en-US"):
 pa = pyaudio.PyAudio()
 
 #Create a stream for recording
-stream = pa.open(format = FORMAT,
+stream = pa.open(input_device_index = 2,
+                 format = FORMAT,
                  channels = 1,
                  rate = RATE,
                  input = True,
@@ -139,7 +141,7 @@ stream.close()
 pa.terminate()       #Destroy the PyAudio object
 
 wav_data = get_wav(frames, FORMAT, RATE)
-flac_data = get_flac(wav_data)
+flac_data = get_flac_pi(wav_data)
 
 
 def goog(flac_data):
