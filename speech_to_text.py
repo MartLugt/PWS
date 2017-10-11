@@ -11,34 +11,30 @@ from urllib.parse import urlencode
 import pyaudio  # pyaudio for recording
 import requests
 
-# Add comments explaining why, not what!!
-
 # Set constants
-FORMAT = pyaudio.paInt16
-RATE = 44100
-BUFFER_SIZE = 4096
-START_COOLDOWN = int(RATE / BUFFER_SIZE * 0.2)  # In seconds
-STOP_COOLDOWN = int(RATE / BUFFER_SIZE * 0.75)  # In seconds
-DEVICE_INDEX = 0  # 2, needs to be 0 for windows, use audio_devices.py to determine right index
+FORMAT = pyaudio.paInt16  # Audio bit depth
+RATE = 44100  # Audio sample rate
+BUFFER_SIZE = 4096  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+START_COOLDOWN = int(RATE / BUFFER_SIZE * 0.2)  # Start cooldown in seconds
+STOP_COOLDOWN = int(RATE / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
+DEVICE_INDEX = 0  # Needs to be 0 for windows, use audio_devices.py to determine right index.
 
 
-class UnknownValueError(Exception):
-    pass
-
-
-def get_wav(frames, format, rate):
+# get_wav turns buffers into a wav file.
+def get_wav(data, rate):
     with io.BytesIO() as file:
         wa = wave.open(file, 'w')
         wa.setnchannels(1)
         wa.setsampwidth(2)
         wa.setframerate(rate)
-        wa.writeframes(b''.join(frames))
+        wa.writeframes(b''.join(data))
         wav_value = file.getvalue()
         wa.close()
     return wav_value
 
 
-def get_flac(wav_data):
+# Google only accepts flac (snobs), get_flac turns the wav file into a flac_file.
+def get_flac(data):
     base_path = "C:\\Users\martv\AppData\Local\Programs\Python\Python35\Lib\site-packages\speech_recognition\\"
     flac_converter = os.path.join(base_path, "flac-win32.exe")  # For Windows x86 and x86-64.
     process = subprocess.Popen([
@@ -48,11 +44,12 @@ def get_flac(wav_data):
         "--best",  # highest level of compression available
         "-",  # the input FLAC file contents will be given in stdin
     ], stdin=subprocess.PIPE, stdout=subprocess.PIPE, startupinfo=None)
-    flac_data, stderr = process.communicate(wav_data)
-    return flac_data
+    result_data, stderr = process.communicate(data)
+    return result_data
 
 
-def get_flac_pi(wav_data):
+# Google only accepts flac (snobs), get_flac_pi turns the wav file into a flac_file using the flac module on Pi.
+def get_flac_pi(data):
     base_path = "/usr/bin"
     flac_converter = os.path.join(base_path, "flac")  # FOR PI.
     process = subprocess.Popen([
@@ -62,11 +59,12 @@ def get_flac_pi(wav_data):
         "--best",  # highest level of compression available
         "-",  # the input FLAC file contents will be given in stdin
     ], stdin=subprocess.PIPE, stdout=subprocess.PIPE, startupinfo=None)
-    flac_data, stderr = process.communicate(wav_data)
-    return flac_data
+    result_data, stderr = process.communicate(data)
+    return result_data
 
 
-def get_google(flac_data, rate, language="en-US"):
+# get_google sends the audio to google and returns the line with the best confidence.
+def get_google(data, rate, language="en-US"):
     url = "http://www.google.com/speech-api/v2/recognize?{}".format(urlencode({
         "client": "chromium",
         "lang": language,
@@ -74,32 +72,34 @@ def get_google(flac_data, rate, language="en-US"):
     }))
 
     headers = {"Content-Type": "audio/x-flac; rate={}".format(rate)}
-    response = requests.post(url, headers=headers, data=flac_data)
-    # Now parse it into the sentence with the best confidence
-    print(response.text)
+    response = requests.post(url, headers=headers, data=data)
 
+    # Now parse it into the sentence with the best confidence
     result_full = []
     for line in response.text.split('\n'):
-        if line == "":
+        if line == "":  # Ignore blank results
             continue
         r = json.loads(line)["result"]
         if r:
             result_full = r[0]
+        else:
+            return None
 
     if not isinstance(result_full, dict):
-        raise UnknownValueError()
+        raise ValueError
 
-    if "alternative" in result_full["alternative"]:
-        result_best = max(result_full["alternative"], key=lambda alternative: alternative["confidence"])
-        if lambda alternative: alternative["confidence"] < 0.7:
-            print("not confident; confidence < 0,7")
+    result_best = result_full["alternative"][0]
+    if "confidence" in result_best:
+        if result_best["confidence"] < 0.7:
+            print("Not confident")
     else:
-        result_best = result_full["alternative"][0]
-        print("not confident; no confidence info")
+        print("No confidence information")
+
     return result_best["transcript"]
 
 
-def get_wit(wav_data, language="en-US"):
+# get_wit turns the audio data into a dictionary.
+def get_wit(data, language="en-US"):
     url = "https://api.wit.ai/speech"
     if language == "en-US":
         key = "EZ7V7OXWF7TURDDTFCYAM2DWLBX2OAIT"
@@ -109,7 +109,7 @@ def get_wit(wav_data, language="en-US"):
         key = None
     headers = {"Authorization": "Bearer " + key, 'accept': 'application/vnd.wit.' + str(5102017) + '+json',
                "Content-Type": "audio/wav"}
-    r = requests.post(url, data=wav_data, headers=headers)
+    r = requests.post(url, data=data, headers=headers)
     return r.text
 
 
@@ -126,7 +126,7 @@ stream = pa.open(input_device_index=DEVICE_INDEX,
 
 print("First be silent, calibrating silence")
 buffer = stream.read(int(RATE / 2))  # half a second
-threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) + 200
+threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
 
 print("We are now recording. Start talking for it to start.")
 
@@ -134,7 +134,6 @@ frames = []
 counter_threshold_stop = 0
 counter_threshold_start = 0
 
-# If sound has been above threshold for n buffers, continue up the loop
 
 while True:
     buffer = stream.read(BUFFER_SIZE)
@@ -143,8 +142,9 @@ while True:
         counter_threshold_start += 1
         frames.append(buffer)
     else:
+        frames = []
         counter_threshold_start = 0
-
+    # If sound has been above threshold for n buffers, continue up the loop.
     if counter_threshold_start > START_COOLDOWN:
         print("Recording Activated")
         while True:
@@ -154,8 +154,10 @@ while True:
             if level > threshold:
                 counter_threshold_stop = 0
             else:
-                counter_threshold_stop += 1  # TODO: cut out empty buffers after break
+                counter_threshold_stop += 1
+            # If sound has been below threshold for n buffers, stop recording.
             if counter_threshold_stop > STOP_COOLDOWN:
+                frames = frames[:-STOP_COOLDOWN]  # Removing the buffers written in the stop cooldown.
                 break
         break
 
@@ -165,7 +167,7 @@ stream.stop_stream()  # Stop and close the stream
 stream.close()
 pa.terminate()  # Destroy the PyAudio object
 
-wav_data = get_wav(frames, FORMAT, RATE)
+wav_data = get_wav(frames, RATE)
 flac_data = get_flac(wav_data)
 
 result_google = get_google(flac_data, RATE, "en-US")
