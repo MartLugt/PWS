@@ -3,6 +3,8 @@
     <words>
       <w>cooldown</w>
       <w>flac</w>
+      <w>pyaudio</w>
+      <w>voicerss</w>
     </words>
   </dictionary>
 </component>

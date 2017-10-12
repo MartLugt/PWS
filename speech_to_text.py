@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import audioop  # audioOperations for checking volume of sound
+import audioop  # audio operations for checking volume of sound
 import io
 import json
 import os
