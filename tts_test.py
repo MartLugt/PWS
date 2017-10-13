@@ -9,7 +9,7 @@ import requests
 
 BUFFER_SIZE = 4096
 
-text = "Hallo maat!"
+text = "After you have a sound card with an audio input, make sure you configure pyaudio to use the correct sound card index and the number of channels (mine had mono audio input, not stereo)."
 
 
 def get_voicerss():
@@ -17,7 +17,7 @@ def get_voicerss():
     # Two different ways of accomplishing the same goal
     url = "https://api.voicerss.org/?{}".format(urlencode({
         "key": key,
-        "hl": "nl-nl",
+        "hl": "en-gb",
         "src": text,
         "c": "WAV",
     }))
@@ -61,6 +61,8 @@ def play(request):
     w = wave.open(file, "r")
 
     pa = pyaudio.PyAudio()
+
+    print(pa.get_format_from_width(w.getsampwidth()))
 
     stream = pa.open(format=pa.get_format_from_width(w.getsampwidth()),
                      channels=w.getnchannels(),

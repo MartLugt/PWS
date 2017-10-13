@@ -6,10 +6,17 @@ import json
 import os
 import subprocess
 import wave  # wave for creating .wav file
+from sys import platform
 from urllib.parse import urlencode
 
 import pyaudio  # pyaudio for recording
 import requests
+
+# Get OS and set constants
+if platform == "win32":
+    DEVICE_INDEX = 0
+elif platform == "linux2":
+    DEVICE_INDEX = 2
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
@@ -17,7 +24,6 @@ RATE = 44100  # Audio sample rate
 BUFFER_SIZE = 4096  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 START_COOLDOWN = int(RATE / BUFFER_SIZE * 0.2)  # Start cooldown in seconds
 STOP_COOLDOWN = int(RATE / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
-DEVICE_INDEX = 0  # Needs to be 0 for windows, use audio_devices.py to determine right index.
 
 
 # get_wav turns buffers into a wav file.
@@ -168,7 +174,10 @@ stream.close()
 pa.terminate()  # Destroy the PyAudio object
 
 wav_data = get_wav(frames, RATE)
-flac_data = get_flac(wav_data)
+if platform == "linux2":
+    flac_data = get_flac_pi(wav_data)
+else:
+    flac_data = get_flac(wav_data)
 
 result_google = get_google(flac_data, RATE, "en-US")
 print(result_google)
