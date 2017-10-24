@@ -3,6 +3,10 @@ text = input().lower()
 # Must return the intent with the most confidence and its confidence.
 # Very crude and simple...
 
+# PROBLEM: any time how or any other keyword is said, the query parser will find a match.
+# there should be keywords that NEED to be in the sentence to get a match.
+# Keywords should be ranked.
+
 def parse(text):
     # Making a dictionary of intents, which are lists of all its keywords.
     intents = {"get_time": ["time", "get", "what", "test"],
