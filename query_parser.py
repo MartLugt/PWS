@@ -14,18 +14,21 @@ def parse(text):
                "get_mood": {"mood": 1, "how are you": 1},
                }
 
+    keyword_buffer = []
     confidences = {}
 
     # Calculate percentage of keywords
     for intent in intents:
         # populate confidence list.
         confidences[intent]= 0.0
+
+        points = 0  # TODO: better names
+        matches = 0
+
         for keyword in intents[intent]:
-            if keyword in text:
-                confidences[intent] += 0
-            elif intents[intent][keyword] == 0:
-                confidences[intent] = 0
-                break
+            if keyword in text and keyword not in keyword_buffer:
+                points += intents[intent][keyword]
+                matches += 1
 
     # Calculate total confidence
     total_confidence = 0
