@@ -3,6 +3,7 @@
 import io
 import wave
 from urllib.parse import urlencode
+import os
 
 import pyaudio
 import requests
@@ -89,7 +90,11 @@ ibm_data = get_watson()
 print("Playing ibm watson:")
 play(ibm_data)
 
-ispeak_data = get_ispeak()
-print(ispeak_data.text)
-print("Playing ispeak:")
-play(ispeak_data)
+# From this point on, only the Linux will succesfully run.
+print("Playing flite:")
+os.system("flite -voice ~/cmu_us_awb.flitevox \"" + text + "\"")
+
+# ispeak_data = get_ispeak()
+# print(ispeak_data.text)
+# print("Playing ispeak:")
+# play(ispeak_data)

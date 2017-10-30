@@ -1,7 +1,7 @@
 # Speech assistant
 In this repository all of the code files for the assistant are stored.
 
-According to all known laws of aviation, there is no way a bee should be able to fly.
+According to all known laws of aviation, there is no way a bee should bee able to fly.
 
 ## Files
 
@@ -22,7 +22,7 @@ Markdown file with instructions and good practices on using Git and GitHub.
 
 #### query_parser.py
 Python script that takes text and returns the intent that it thinks you had.  
-`TODO: add more info`
+Basically a bunch of if statements but simplified.
 
 
 #### speech_to_text.py
