@@ -1,7 +1,7 @@
 # Speech assistant
 In this repository all of the code files for the assistant are stored.
 
-
+According to all known laws of aviation, there is no way a bee should be able to fly.
 
 ## Files
 
