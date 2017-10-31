@@ -15,13 +15,13 @@ import requests
 # Get OS and set constants
 if platform == "win32":
     DEVICE_INDEX = 0
-elif platform == "linux2":
-    DEVICE_INDEX = 2
+elif platform == "linux2" or platform == "linux":
+    DEVICE_INDEX = 0
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
 RATE = 44100  # Audio sample rate
-BUFFER_SIZE = 4096  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+BUFFER_SIZE = 8192  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 START_COOLDOWN = int(RATE / BUFFER_SIZE * 0.2)  # Start cooldown in seconds
 STOP_COOLDOWN = int(RATE / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
 
@@ -54,15 +54,26 @@ def get_flac(data):
     return result_data
 
 
+def get_flac_raw(data):
+    base_path = "/usr/bin"
+    flac_converter = os.path.join(base_path, "flac")
+    process = subprocess.Popen([
+        flac_converter,
+        "--stdout",
+        "--best"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, startupinfo=None)
+    result_data, stderr = process.communicate(data)
+    return result_data
+
+
 # Google only accepts flac (snobs), get_flac_pi turns the wav file into a flac_file using the flac module on Pi.
 def get_flac_pi(data):
     base_path = "/usr/bin"
     flac_converter = os.path.join(base_path, "flac")  # FOR PI.
     process = subprocess.Popen([
         flac_converter,
-        "--stdout", "--totally-silent",
+        "--stdout", #  "--totally-silent",
         # put the resulting FLAC file in stdout, and make sure it's not mixed with any program output
-        "--best",  # highest level of compression available
+        "--compression-level-8",  # highest level of compression available
         "-",  # the input FLAC file contents will be given in stdin
     ], stdin=subprocess.PIPE, stdout=subprocess.PIPE, startupinfo=None)
     result_data, stderr = process.communicate(data)
@@ -174,7 +185,7 @@ stream.close()
 pa.terminate()  # Destroy the PyAudio object
 
 wav_data = get_wav(frames, RATE)
-if platform == "linux2":
+if platform == "linux2" or platform == "linux":
     flac_data = get_flac_pi(wav_data)
 else:
     flac_data = get_flac(wav_data)

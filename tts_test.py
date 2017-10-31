@@ -41,7 +41,6 @@ def get_watson():
     return request
 
 
-# TODO: get new api key
 def get_ispeak():
     key = "01d0b6f0dc6c29b45cbe884ec11a1923"
     url = "http://api.ispeech.org/api/rest"
