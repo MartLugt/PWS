@@ -9,7 +9,7 @@ import requests
 
 BUFFER_SIZE = 4096
 
-text = "After you have a sound card with an audio input, make sure you configure pyaudio to use the correct sound card index and the number of channels (mine had mono audio input, not stereo)."
+text = "I like pink fluffy unicorns dancing on rainbows. pink pink pink pink pink pink unicorn unicorn unicorn poop."
 
 
 def get_voicerss():
@@ -33,7 +33,7 @@ def get_watson():
     params = (
         ('accept', 'audio/wav'),
         ('text', text),
-        ('voice', 'en-US_AllisonVoice'),
+        ('voice', 'en-US_MichaelVoice'),
     )
 
     request = requests.get(url, params=params, auth=(username, password))
@@ -85,9 +85,10 @@ rss_data = get_voicerss()
 print("Playing voicerss:")
 play(rss_data)
 
-ibm_data = get_watson()
-print("Playing ibm watson:")
-play(ibm_data)
+while True:
+    ibm_data = get_watson()
+    print("Playing ibm watson:")
+    play(ibm_data)
 
 ispeak_data = get_ispeak()
 print(ispeak_data.text)

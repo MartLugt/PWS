@@ -15,8 +15,10 @@ import requests
 # Get OS and set constants
 if platform == "win32":
     DEVICE_INDEX = 0
-elif platform == "linux2":
+elif platform == "linux" or platform == "linux2":
     DEVICE_INDEX = 2
+
+print(DEVICE_INDEX)
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
@@ -174,7 +176,7 @@ stream.close()
 pa.terminate()  # Destroy the PyAudio object
 
 wav_data = get_wav(frames, RATE)
-if platform == "linux2":
+if platform == "linux" or platform == "linux2":
     flac_data = get_flac_pi(wav_data)
 else:
     flac_data = get_flac(wav_data)
