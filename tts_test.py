@@ -15,7 +15,6 @@ text = "After you have a sound card with an audio input, make sure you configure
 
 def get_voicerss():
     key = "6dfbb0ac7bfc4571969d1fd6dfe7a6b0"
-    # Two different ways of accomplishing the same goal
     url = "https://api.voicerss.org/?{}".format(urlencode({
         "key": key,
         "hl": "en-gb",
@@ -90,11 +89,13 @@ ibm_data = get_watson()
 print("Playing ibm watson:")
 play(ibm_data)
 
+ispeak_data = get_ispeak()
+print(ispeak_data.text)
+print("Playing ispeak:")
+play(ispeak_data)
+
 # From this point on, only the Linux will succesfully run.
 print("Playing flite:")
 os.system("flite -voice ~/cmu_us_awb.flitevox \"" + text + "\"")
 
-# ispeak_data = get_ispeak()
-# print(ispeak_data.text)
-# print("Playing ispeak:")
-# play(ispeak_data)
+

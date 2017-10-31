@@ -3,16 +3,14 @@ text = input().lower()
 # Must return the intent with the most confidence and its confidence.
 # Very crude and simple...
 
-# PROBLEM: any time how or any other keyword is said, the query parser will find a match.
-# there should be keywords that NEED to be in the sentence to get a match.
-# Keywords should be ranked.
-
 def parse(text):
     # Making a dictionary of intents, which are lists of all its keywords.
     # need to add this or that for keywords ea what or get
+    # The intents higher up in the dictionary are more important and will be picked faster.
     intents = {"get_time": {"time": 0, "what": 1, "get": 2},
                "set_time": {"time": 0, "set": 1, "change": 2},
                "get_mood": {"mood": 1, "how are you": 1},
+               "joke": {"joke": 0, "tell": 1},
                }
 
     confidences = {}
@@ -27,45 +25,43 @@ def parse(text):
         points = 0  # TODO: better names
         matches = 0
         zero_keywords = 0
-
+        print(zero_keywords)
         keyword_buffer = []
         print(keyword_buffer)
 
         for keyword in intents[intent]:
+            print(intent, keyword)
             if keyword in text and keyword not in keyword_buffer:
                 points += intents[intent][keyword]
                 matches += 1
-                confidences[intent] = points/matches
+                keyword_buffer.append(keyword)
+
             if intents[intent][keyword] == 0:
                 zero_keywords += 1
-            keyword_buffer.append(keyword)
         print("keywords with 0:", str(zero_keywords))
+
+        if matches == 1 and points == 0:  # another weird shadow case
+            confidences[intent] = 1
+        elif matches == 0:
+            confidences[intent] = 0
+        else:
+            confidences[intent] = points / matches
 
         zeroes = 0
         for word in keyword_buffer:
-            print(word)
+            print(word, intents[intent][word])
             if intents[intent][word] == 0:
                 zeroes += 1
         print("zeroes:", str(zeroes))
 
         if zeroes != zero_keywords:
-            confidences[intent] = 0
+            confidences[intent] = 999  # make confidence realy big so it wont get picked
 
-    # # Calculate total confidence
-    # total_confidence = 0
-    # for confidence in confidences.values():
-    #     total_confidence += confidence
-    #
-    # if total_confidence == 0:
-    #     print("no match")
-    #     exit(0)
-    #
-    # # Make confidence 1 total.
-    # for intent in confidences:
-    #     confidences[intent] = confidences[intent]/total_confidence
-    #
-    # # Get key with max value
-    # return max(confidences, key=confidences.get), max(confidences.values())
-    print(confidences)
+        if zero_keywords == 0 and points == 0:
+            confidences[intent] = 999  # fix weird case
 
-parse(text)
+    print("\n\n")
+    return min(confidences, key=confidences.get), min(confidences.values())
+
+print("\n\n")
+print(parse(text))

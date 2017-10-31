@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 
 import pyaudio  # pyaudio for recording
 import requests
+import sys
 
 # Get OS and set constants
 if platform == "win32":
@@ -41,7 +42,7 @@ def get_wav(data, rate):
 
 # Google only accepts flac (snobs), get_flac turns the wav file into a flac_file.
 def get_flac(data):
-    base_path = "C:\\Users\martv\AppData\Local\Programs\Python\Python35\Lib\site-packages\speech_recognition\\"
+    base_path = sys.exec_prefix + "Lib\site-packages\speech_recognition\\"
     flac_converter = os.path.join(base_path, "flac-win32.exe")  # For Windows x86 and x86-64.
     process = subprocess.Popen([
         flac_converter,
