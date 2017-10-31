@@ -3,6 +3,7 @@
 import io
 import wave
 from urllib.parse import urlencode
+import os
 
 import pyaudio
 import requests
@@ -14,7 +15,6 @@ text = "I like pink fluffy unicorns dancing on rainbows. pink pink pink pink pin
 
 def get_voicerss():
     key = "6dfbb0ac7bfc4571969d1fd6dfe7a6b0"
-    # Two different ways of accomplishing the same goal
     url = "https://api.voicerss.org/?{}".format(urlencode({
         "key": key,
         "hl": "en-gb",
@@ -94,3 +94,9 @@ ispeak_data = get_ispeak()
 print(ispeak_data.text)
 print("Playing ispeak:")
 play(ispeak_data)
+
+# From this point on, only the Linux will succesfully run.
+print("Playing flite:")
+os.system("flite -voice ~/cmu_us_awb.flitevox \"" + text + "\"")
+
+
