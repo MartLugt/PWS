@@ -8,20 +8,24 @@ import subprocess
 import wave  # wave for creating .wav file
 from sys import platform
 from urllib.parse import urlencode
-
+from urllib.request import Request, urlopen
 import pyaudio  # pyaudio for recording
 import requests
+import sys
 
 # Get OS and set constants
 if platform == "win32":
     DEVICE_INDEX = 0
-elif platform == "linux2" or platform == "linux":
-    DEVICE_INDEX = 0
+elif platform == "linux" or platform == "linux2":
+    DEVICE_INDEX = 1
+
+
+print(DEVICE_INDEX)
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
 RATE = 44100  # Audio sample rate
-BUFFER_SIZE = 8192  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+BUFFER_SIZE = 4096  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 START_COOLDOWN = int(RATE / BUFFER_SIZE * 0.2)  # Start cooldown in seconds
 STOP_COOLDOWN = int(RATE / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
 
@@ -41,7 +45,7 @@ def get_wav(data, rate):
 
 # Google only accepts flac (snobs), get_flac turns the wav file into a flac_file.
 def get_flac(data):
-    base_path = "C:\\Users\martv\AppData\Local\Programs\Python\Python35\Lib\site-packages\speech_recognition\\"
+    base_path = sys.exec_prefix + "Lib\site-packages\speech_recognition\\"
     flac_converter = os.path.join(base_path, "flac-win32.exe")  # For Windows x86 and x86-64.
     process = subprocess.Popen([
         flac_converter,
@@ -55,8 +59,8 @@ def get_flac(data):
 
 
 def get_flac_raw(data):
-    base_path = "/usr/bin"
-    flac_converter = os.path.join(base_path, "flac")
+    base_path = "/home/martlugt/speech_recognition/speech_recognition/"
+    flac_converter = os.path.join(base_path, "flac-linux-x86_64")
     process = subprocess.Popen([
         flac_converter,
         "--stdout",
@@ -67,8 +71,8 @@ def get_flac_raw(data):
 
 # Google only accepts flac (snobs), get_flac_pi turns the wav file into a flac_file using the flac module on Pi.
 def get_flac_pi(data):
-    base_path = "/usr/bin"
-    flac_converter = os.path.join(base_path, "flac")  # FOR PI.
+    base_path = "/home/martlugt/speech_recognition/speech_recognition/"
+    flac_converter = os.path.join(base_path, "flac-linux-x86_64")  # FOR PI.
     process = subprocess.Popen([
         flac_converter,
         "--stdout", #  "--totally-silent",
@@ -90,17 +94,17 @@ def get_google(data, rate, language="en-US"):
 
     headers = {"Content-Type": "audio/x-flac; rate={}".format(rate)}
     response = requests.post(url, headers=headers, data=data)
-
     # Now parse it into the sentence with the best confidence
+    print(response.text)
+
     result_full = []
     for line in response.text.split('\n'):
-        if line == "":  # Ignore blank results
+        if not line:
             continue
         r = json.loads(line)["result"]
-        if r:
+        if len(r) != 0:
             result_full = r[0]
-        else:
-            return None
+            break
 
     if not isinstance(result_full, dict):
         raise ValueError
@@ -185,7 +189,7 @@ stream.close()
 pa.terminate()  # Destroy the PyAudio object
 
 wav_data = get_wav(frames, RATE)
-if platform == "linux2" or platform == "linux":
+if platform == "linux" or platform == "linux2":
     flac_data = get_flac_pi(wav_data)
 else:
     flac_data = get_flac(wav_data)
