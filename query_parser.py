@@ -1,5 +1,3 @@
-text = input().lower()
-
 # Must return the intent with the most confidence and its confidence.
 # Very crude and simple...
 
@@ -63,6 +61,3 @@ def parse(text):
 
     print("\n\n")
     return min(confidences, key=confidences.get), min(confidences.values())
-
-print("\n\n")
-print(parse(text))
