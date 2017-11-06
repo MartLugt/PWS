@@ -7,10 +7,11 @@ def parse(text):
     # Making a dictionary of intents, which are lists of all its keywords.
     # need to add this or that for keywords ea what or get
     # The intents higher up in the dictionary are more important and will be picked faster.
-    intents = {"get_time": {"time": 0, "what": 1, "get": 2},
-               "set_time": {"time": 0, "set": 1, "change": 2},
+    intents = {"get_time": {"time": 0, "what": 2, "get": 2},
+               "set_time": {"time": 0, "set": 2, "change": 2},
                "get_mood": {"mood": 1, "how are you": 1},
                "joke": {"joke": 0, "tell": 1},
+               "get_weather": {"weather": 0, "what": 2},
                }
 
     confidences = {}

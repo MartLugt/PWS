@@ -4,13 +4,14 @@ import io
 import wave
 from urllib.parse import urlencode
 import os
+import vlc
 
 import pyaudio
 import requests
 
 BUFFER_SIZE = 4096
 
-text = "I like pink fluffy unicorns dancing on rainbows. pink pink pink pink pink pink unicorn unicorn unicorn poop."
+text = "It is ya boy mama. I like pink fluffy unicorns. Sample Perl Script with highlighting. unicorn poop lol."
 
 
 def get_voicerss():
@@ -55,6 +56,14 @@ def get_ispeak():
     return request
 
 
+def get_responsive_voice():
+    params = urlencode({"t": text, "tl": "en-gb"})
+    baseUrl = "http://responsivevoice.org/responsivevoice/getvoice.php"
+    os.system("wget /tmp/assistant.mp3 \"%(url)s?%(params)s\" | play" % { "url": baseUrl, "params": params })
+
+# AMAZON WEB SERVICES!!! FIX IT!!!
+
+
 def play(request):
     file = io.BytesIO(request.content)  # When using str.encode(request.text), there is a lot of noise.
     w = wave.open(file, "r")
@@ -82,20 +91,22 @@ def play(request):
 
 rss_data = get_voicerss()
 print("Playing voicerss:")
-play(rss_data)
+# play(rss_data)
 
-while True:
-    ibm_data = get_watson()
-    print("Playing ibm watson:")
-    play(ibm_data)
 
-ispeak_data = get_ispeak()
-print(ispeak_data.text)
-print("Playing ispeak:")
-play(ispeak_data)
+ibm_data = get_watson()
+print("Playing ibm watson:")
+play(ibm_data)
+
+# ispeak_data = get_ispeak()
+# print(ispeak_data.text)
+# print("Playing ispeak:")
+# play(ispeak_data)
+get_responsive_voice()
 
 # From this point on, only the Linux will succesfully run.
 print("Playing flite:")
 os.system("flite -voice ~/cmu_us_awb.flitevox \"" + text + "\"")
 
-
+print("Playing espeak:")
+os.system("espeak \"" + text + "\"")
