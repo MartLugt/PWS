@@ -61,8 +61,6 @@ def get_responsive_voice():
     baseUrl = "http://responsivevoice.org/responsivevoice/getvoice.php"
     os.system("wget /tmp/assistant.mp3 \"%(url)s?%(params)s\" | play" % { "url": baseUrl, "params": params })
 
-# AMAZON WEB SERVICES!!! FIX IT!!!
-
 
 def play(request):
     file = io.BytesIO(request.content)  # When using str.encode(request.text), there is a lot of noise.
@@ -91,7 +89,7 @@ def play(request):
 
 rss_data = get_voicerss()
 print("Playing voicerss:")
-# play(rss_data)
+play(rss_data)
 
 
 ibm_data = get_watson()
@@ -102,7 +100,6 @@ play(ibm_data)
 # print(ispeak_data.text)
 # print("Playing ispeak:")
 # play(ispeak_data)
-get_responsive_voice()
 
 # From this point on, only the Linux will succesfully run.
 print("Playing flite:")

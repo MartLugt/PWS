@@ -21,7 +21,7 @@ elif platform == "linux" or platform == "linux2":
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
-BUFFER_SIZE = 4096  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+BUFFER_SIZE = 8192  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 
 
 
@@ -140,12 +140,13 @@ def record(rate):
     stream = pa.open(input_device_index=DEVICE_INDEX,
                      format=FORMAT,
                      channels=1,
-                     rate=RATE,
+                     rate=rate,
                      input=True,
                      frames_per_buffer=BUFFER_SIZE)
 
     print("First be silent, calibrating silence")
-    buffer = stream.read(int(RATE / 2))  # half a second
+    buffer = stream.read(int(rate/2))
+
     threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
 
     print("We are now recording. Start talking for it to start.")
