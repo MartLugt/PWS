@@ -13,12 +13,6 @@ import pyaudio  # pyaudio for recording
 import requests
 import sys
 
-# Get OS and set constants
-if platform == "win32":
-    DEVICE_INDEX = 0
-elif platform == "linux" or platform == "linux2":
-    DEVICE_INDEX = 1
-
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
 BUFFER_SIZE = 8192  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
@@ -53,21 +47,10 @@ def get_flac(data):
     return result_data
 
 
-def get_flac_raw(data):
-    base_path = "/home/martlugt/speech_recognition/speech_recognition/"
-    flac_converter = os.path.join(base_path, "flac-linux-x86_64")
-    process = subprocess.Popen([
-        flac_converter,
-        "--stdout",
-        "--best"], stdin=subprocess.PIPE, stdout=subprocess.PIPE, startupinfo=None)
-    result_data, stderr = process.communicate(data)
-    return result_data
-
-
 # Google only accepts flac (snobs), get_flac_pi turns the wav file into a flac_file using the flac module on Pi.
-def get_flac_pi(data):
-    base_path = "/home/martlugt/speech_recognition/speech_recognition/"
-    flac_converter = os.path.join(base_path, "flac-linux-x86_64")  # FOR PI.
+def get_flac_linux(data):
+    base_path = "/usr/bin/"
+    flac_converter = os.path.join(base_path, "flac")  # for linux
     process = subprocess.Popen([
         flac_converter,
         "--stdout", #  "--totally-silent",
@@ -129,7 +112,7 @@ def get_wit(data, language="en-US"):
     r = requests.post(url, data=data, headers=headers)
     return r.text
 
-def record(rate):
+def record(rate, device_index):
     # First create the PyAudio object
     pa = pyaudio.PyAudio()
 
@@ -137,7 +120,7 @@ def record(rate):
     STOP_COOLDOWN = int(rate / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
 
     # Create a stream for recording
-    stream = pa.open(input_device_index=DEVICE_INDEX,
+    stream = pa.open(input_device_index=device_index,
                      format=FORMAT,
                      channels=1,
                      rate=rate,

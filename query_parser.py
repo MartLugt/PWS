@@ -54,10 +54,14 @@ def parse(text):
         print("zeroes:", str(zeroes))
 
         if zeroes != zero_keywords:
-            confidences[intent] = 999  # make confidence realy big so it wont get picked
+            confidences.pop(intent, None)
 
         if zero_keywords == 0 and points == 0:
-            confidences[intent] = 999  # fix weird case
+            confidences.pop(intent, None)
 
+    print(confidences)
     print("\n\n")
-    return min(confidences, key=confidences.get), min(confidences.values())
+    if confidences:
+        return min(confidences, key=confidences.get), min(confidences.values())
+    else:
+        return ("no_match", 0.0)
