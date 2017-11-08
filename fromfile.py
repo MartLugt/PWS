@@ -15,7 +15,7 @@ with sr.AudioFile(AUDIO_FILE) as source:
 
 # recognize speech using Sphinx
 try:
-    print("Sphinx thinks you said " + r.recognize_sphinx(audio))
+    print("Sphinx thinks you said " + r.recognize_sphinx(audio)
 except sr.UnknownValueError:
     print("Sphinx could not understand audio")
 except sr.RequestError as e:
@@ -70,3 +70,13 @@ except sr.UnknownValueError:
     print("Houndify could not understand audio")
 except sr.RequestError as e:
     print("Could not request results from Houndify service; {0}".format(e))
+
+# recognize speech using IBM Speech to Text
+IBM_USERNAME = "8854d883-37ca-48ce-a4a8-1d531951ce42"
+IBM_PASSWORD = "iAAP7Whw8qDd"
+try:
+    print("IBM Speech to Text thinks you said " + r.recognize_ibm(audio, username=IBM_USERNAME, password=IBM_PASSWORD))
+except sr.UnknownValueError:
+    print("IBM Speech to Text could not understand audio")
+except sr.RequestError as e:
+    print("Could not request results from IBM Speech to Text service; {0}".format(e))
