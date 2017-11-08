@@ -1,6 +1,8 @@
 # Speech assistant
 In this repository all of the code files for the assistant are stored.
 
+The text can be found at [Overleaf](https://www.overleaf.com/read/sfsdgrsfgmfb)
+
 According to all known laws of aviation, there is no way a bee should bee able to fly.
 
 ## Files
