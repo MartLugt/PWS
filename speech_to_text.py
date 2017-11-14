@@ -53,7 +53,8 @@ def get_flac_linux(data):
     flac_converter = os.path.join(base_path, "flac")  # for linux
     process = subprocess.Popen([
         flac_converter,
-        "--stdout", #  "--totally-silent",
+        "--stdout",
+        "--totally-silent",
         # put the resulting FLAC file in stdout, and make sure it's not mixed with any program output
         "--compression-level-8",  # highest level of compression available
         "-",  # the input FLAC file contents will be given in stdin
@@ -112,20 +113,22 @@ def get_wit(data, language="en-US"):
     r = requests.post(url, data=data, headers=headers)
     return r.text
 
-def record(rate, device_index):
+def record(rate, device_index, num_channels = 1):
     # First create the PyAudio object
     pa = pyaudio.PyAudio()
-
+    pa.get_device_info_by_index(0)
+    print(num_channels)
     START_COOLDOWN = int(rate / BUFFER_SIZE * 0.2)  # Start cooldown in seconds
     STOP_COOLDOWN = int(rate / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
 
     # Create a stream for recording
-    stream = pa.open(input_device_index=device_index,
+    stream = pa.open(channels = num_channels,
                      format=FORMAT,
-                     channels=1,
                      rate=rate,
                      input=True,
-                     frames_per_buffer=BUFFER_SIZE)
+                     frames_per_buffer=BUFFER_SIZE,
+                     )
+
 
     print("First be silent, calibrating silence")
     buffer = stream.read(int(rate/2))
@@ -173,3 +176,4 @@ def record(rate, device_index):
 
     return frames
 
+# record(44100, 1)

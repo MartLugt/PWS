@@ -1,18 +1,24 @@
+import snowboydecoder as sb
 import speech_to_text
 import query_parser
 import sys
+import pyaudio
+import time
 
-# TODO: add command line arguments for rate, flac compiler, language, device index. 
-frames = speech_to_text.record(rate = 44100, device_index = 1)
+model = "piet.pmdl"
 
-wav_data = speech_to_text.get_wav(frames, 44100)
-if sys.platform == "linux" or sys.platform == "linux2":
-    flac_data = speech_to_text.get_flac_linux(wav_data)
-else:
-    flac_data = speech_to_text.get_flac(wav_data)
+def record():
+    detector.terminate()
 
-result_google = speech_to_text.get_google(flac_data, 44100, "en-UK")
-print(result_google)
+    frames = speech_to_text.record(rate = 44100, device_index = 1, num_channels = detector.get_channel())
+    wav = speech_to_text.get_wav(frames, 44100)
+    flac = speech_to_text.get_flac_linux(wav)
+    print(speech_to_text.get_google(flac, 44100))
 
-print(query_parser.parse(result_google))
 
+detector = sb.HotwordDetector(model, sensitivity=0.4)
+print("Listening...")
+
+detector.start(detected_callback=record, sleep_time=0.03)
+
+detector.terminate()
