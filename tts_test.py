@@ -41,21 +41,6 @@ def get_watson():
     return request
 
 
-def get_ispeak():
-    key = "01d0b6f0dc6c29b45cbe884ec11a1923"
-    url = "http://api.ispeech.org/api/rest"
-
-    params = (
-        ('action', 'convert'),
-        ('text', text),
-        ('key', key),
-        ('format', 'wav'),
-    )
-
-    request = requests.get(url, params=params)
-    return request
-
-
 def get_responsive_voice():
     params = urlencode({"t": text, "tl": "en-gb"})
     baseUrl = "http://responsivevoice.org/responsivevoice/getvoice.php"
@@ -95,11 +80,6 @@ play(rss_data)
 ibm_data = get_watson()
 print("Playing ibm watson:")
 play(ibm_data)
-
-# ispeak_data = get_ispeak()
-# print(ispeak_data.text)
-# print("Playing ispeak:")
-# play(ispeak_data)
 
 # From this point on, only the Linux will succesfully run.
 print("Playing flite:")
