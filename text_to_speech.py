@@ -6,6 +6,9 @@ import wave
 
 BUFFER_SIZE = 2048
 
+pa = pyaudio.PyAudio()
+
+
 def get_watson(text):
     username = "6014826e-8384-4738-8e1f-16a398ee3f95"
     password = "kbfIz4iR3xGi"
@@ -25,7 +28,6 @@ def play(request):
     file = BytesIO(request.content)
     w = wave.open(file, "r")  # open the file with wave in r(read) mode
 
-    pa = pyaudio.PyAudio()
     stream = pa.open(format=pa.get_format_from_width(w.getsampwidth()),
                      channels=w.getnchannels(),
                      rate=w.getframerate(),

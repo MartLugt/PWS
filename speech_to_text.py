@@ -114,10 +114,10 @@ def get_wit(data, language="en-US"):
     r = requests.post(url, data=data, headers=headers)
     return r.text
 
-def record(rate, device_index, num_channels = 1, ding = False):
+
+def record(rate, device_index, num_channels = 1, ding = False, pa = pyaudio.PyAudio()):
 
     # First create the PyAudio object
-    pa = pyaudio.PyAudio()
     pa.get_device_info_by_index(0)
     print(num_channels)
     START_COOLDOWN = int(rate / BUFFER_SIZE * 0.2)  # Start cooldown in seconds

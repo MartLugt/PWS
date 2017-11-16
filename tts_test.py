@@ -11,7 +11,7 @@ import requests
 
 BUFFER_SIZE = 4096
 
-text = "It is ya boy mama. I like pink fluffy unicorns. Sample Perl Script with highlighting. unicorn poop lol."
+text = "It is ya boy mama. I like pink fluffy unicorns dancing on rainbows hahaha pink fluffy unicorns dancing on rainbows. Ya boiiiii. hahaha lol unicorn rainbow poop."
 
 
 def get_voicerss():
@@ -26,9 +26,9 @@ def get_voicerss():
 
 
 def get_watson():
-    username = "a3a10d5d-ce68-410c-b066-f82c08242c60"
-    password = "pnsxzzkxaVcj"
-    url = "https://stream.watsonplatform.net/text-to-speech/api"
+    username = "6014826e-8384-4738-8e1f-16a398ee3f95"
+    password = "kbfIz4iR3xGi"
+    url = "https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize"
 
     # Two different ways of accomplishing the same goal
     params = (
