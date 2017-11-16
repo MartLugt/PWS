@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 import pyaudio  # pyaudio for recording
 import requests
 import sys
+import text_to_speech
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
@@ -95,7 +96,7 @@ def get_google(data, rate, language="en-US"):
             print("Not confident")
     else:
         print("No confidence information")
-
+    print(result_best["transcript"])
     return result_best["transcript"]
 
 
@@ -113,7 +114,8 @@ def get_wit(data, language="en-US"):
     r = requests.post(url, data=data, headers=headers)
     return r.text
 
-def record(rate, device_index, num_channels = 1):
+def record(rate, device_index, num_channels = 1, ding = False):
+
     # First create the PyAudio object
     pa = pyaudio.PyAudio()
     pa.get_device_info_by_index(0)
@@ -136,6 +138,9 @@ def record(rate, device_index, num_channels = 1):
     threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
 
     print("We are now recording. Start talking for it to start.")
+
+    if ding:
+        text_to_speech.play_ding()
 
     frames = []
     counter_threshold_stop = 0
@@ -173,6 +178,9 @@ def record(rate, device_index, num_channels = 1):
     stream.stop_stream()  # Stop and close the stream
     stream.close()
     pa.terminate()  # Destroy the PyAudio object
+
+    if ding:
+        text_to_speech.play_dong()
 
     return frames
 

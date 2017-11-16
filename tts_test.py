@@ -28,7 +28,7 @@ def get_voicerss():
 def get_watson():
     username = "a3a10d5d-ce68-410c-b066-f82c08242c60"
     password = "pnsxzzkxaVcj"
-    url = "https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize"
+    url = "https://stream.watsonplatform.net/text-to-speech/api"
 
     # Two different ways of accomplishing the same goal
     params = (
