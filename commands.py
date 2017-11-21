@@ -7,11 +7,10 @@ import text_to_speech
 import requests
 from random import randint
 
-dmood = {0: "I am very happy",
-         1: "I am fine, thanks",
-         2: "I am a bit tired",
-         3: "I have a headache",
-         4: "I am sick of your face"}
+dmood = {0: "I am very happy", 1: "I am fine", 2: "I am a bit tired", 3: "I have a headache", 4: "I am sick of your face", }
+
+def play(text):
+    text_to_speech.play(text_to_speech.get_watson(text))
 
 # for example:
 
