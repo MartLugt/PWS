@@ -6,7 +6,7 @@ import sys
 import pyaudio
 import time
 
-model = "piet.pmdl"
+model = "unicorn.pmdl"
 rate = 44100
 
 
@@ -23,7 +23,7 @@ def callback():
     sound = text_to_speech.get_watson(text)
     text_to_speech.play(sound)
 
-detector = sb.HotwordDetector(model, sensitivity=0.4)
+detector = sb.HotwordDetector(model, sensitivity=0.7)
 print("Listening...")
 
 detector.start(detected_callback=callback, sleep_time=0.03)
