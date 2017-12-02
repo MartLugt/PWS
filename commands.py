@@ -20,18 +20,25 @@ def get_time():
     print(time)
     text_to_speech.play(text_to_speech.get_watson("It currently is " + time + "."))
 
-"""def get_location():
-    url = "https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyDQTGEltrkBmtOOpkcF-kH9LRvCuq8MBhg"
-    request = requests.post(url)
-    
-    text_to_speech.play(text_to_speech.get_watson("""
+def get_weather():
+    r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/waddinxveen.json")
+
+    info = r.json()["current_observation"]
+
+    temp = info["temp_c"]
+    weather = info["weather"]
+    play("The weather in Waddinxveen is %s with a temperature of %s." % (weather, temp_c))
 
 def get_mood():
     mood = randint(0, 4)
     text_to_speech.play(text_to_speech.get_watson(dmood[mood]))
 
-intent = str(input()).lower()
+def exec(intent):
 
-if intent == "get_time":
-    get_time()
+    if intent == "get_time":
+        get_time()
+    elif intent == "get_weather":
+        get_weather()
+    elif intent == "get_mood":
+        get_mood()
 
