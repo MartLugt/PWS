@@ -41,10 +41,8 @@ def get_mood():
 
 def search(text):
     # First parse the text so only the search query remains.
+    text.replace("search for", "")
     text.replace("search", "")
-    if "for" in text:
-        text.replace("for", "")
-
 
     url = "https://www.googleapis.com/customsearch/v1?parameters&{}".format(urlencode({
         "key": "AIzaSyDdsopTPMwh6kDCaSfBhctBzYiDm7VKjNs",
