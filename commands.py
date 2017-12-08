@@ -7,26 +7,28 @@ import text_to_speech
 import requests
 from random import randint
 from urllib.parse import urlencode
-import json
 
 dmood = {0: "I am very happy", 1: "I am fine", 2: "I am a bit tired", 3: "I have a headache", 4: "I am sick of your face", }
 
-def play(text):
-    text_to_speech.play(text_to_speech.get_watson(text))
+def play(text, female=False):
+    if female:
+        text_to_speech.play(text_to_speech.get_watson(text, female=True))
+    else:
+        text_to_speech.play(text_to_speech.get_watson(text))
 
 # for example:
 
 
 # This intent says the current time.
-def get_time():
+def get_time(text):
     time = datetime.datetime.now().strftime('%H:%M')
     print(time)
     text_to_speech.play(text_to_speech.get_watson("It currently is " + time + "."))
 
 
-def get_weather():
+def get_weather(text):
     r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/waddinxveen.json")
-
+    print(r.json())
     info = r.json()["current_observation"]
 
     temp = info["temp_c"]
@@ -34,7 +36,47 @@ def get_weather():
     play("The weather in Waddinxveen is %s with a temperature of %s." % (weather, temp))
 
 
-def get_mood():
+def get_news(text):
+    url = "https://newsapi.org/v2/top-headlines?{}".format(urlencode({
+        "language": "en",
+        "apiKey": "16ecf09edfc34e0eabc143c492d3438c"
+    }))
+
+    url += "&sources="
+
+    if "tech" in text:
+        url += "ars-technica"
+    elif "sport" in text:
+        url += "bbc-sport"
+    elif "gaming" in text or "game" in text:
+        url += "polygon"
+    elif "business" in text or "econom" in text:
+        url += "the-economist"
+    elif "reddit" in text:
+        url += "reddit-r-all"
+    else:
+        url += "bbc-news"
+
+    print(url)
+
+    r = requests.get(url)
+    news = r.json()["articles"]
+
+    # play("OK, here you go:")
+
+    print(news)
+
+    text = ""
+    for article in news:
+        if article["description"] is None:
+            article["description"] = ""
+        text += article["title"] + ". " + article["description"] + ".,. "
+        print(text)
+
+    play(text)
+
+
+def get_mood(text):
     mood = randint(0, 4)
     text_to_speech.play(text_to_speech.get_watson(dmood[mood]))
 
@@ -54,7 +96,8 @@ def search(text):
 
     print(url)
     r = requests.get(url)
-    result = json.loads(r.content)
+    result = r.json()
+    print(result)
 
     items = result["items"]
 
@@ -74,13 +117,15 @@ def search(text):
 
 def execute(intent, text = None):
     if intent == "get_time":
-        get_time()
+        get_time(text)
     elif intent == "get_weather":
-        get_weather()
+        get_weather(text)
     elif intent == "get_mood":
-        get_mood()
+        get_mood(text)
     elif intent == "search":
         search(text)
+    elif intent == "get_news":
+        get_news(text)
 
 
-execute("search", "Search you are gay")
+execute("get_news", "reddit ")
