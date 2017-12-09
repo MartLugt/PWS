@@ -139,7 +139,8 @@ def guess():
 
     def game():
     	global turns
-	    guess = int(input("Your guess: "))
+	    say("Guess a number between zero and " + answer)
+	    guess = input(dit moet veranderd worden)
 	    if (guess < answer):
 		    say("Guess higher!")
 		    turns = turns + 1
