@@ -22,11 +22,15 @@ def play(text, female=False):
         text_to_speech.play(text_to_speech.get_watson(text))
 
 
-def record():
-    frames = stt.record()
-    w = stt.get_wav(frames)
-    f = stt.get_flac(w)
-    return stt.get_google(f, 44100)
+def record(text=True):
+    if text:
+        frames = stt.record()
+        w = stt.get_wav(frames)
+        f = stt.get_flac(w)
+        return stt.get_google(f, 44100)
+    else:
+        frames = stt.record()
+        return stt.get_wav(frames)
 
 # for example:
 
@@ -136,25 +140,8 @@ def snowboy(text):
     print(name)
     # play("Ok! The name is %s. Now please say this name after each beep." % name)
 
-    file = BytesIO(w)
-    w = wave.open(file, "r")  # open the file with wave in r(read) mode
-
-    pa = pyaudio.PyAudio()
-    stream = pa.open(format=pa.get_format_from_width(w.getsampwidth()),
-                     channels=w.getnchannels(),
-                     rate=w.getframerate(),
-                     output=True)
-
-    data = w.readframes(2048)
-
-    while data:
-        stream.write(data)
-        data = w.readframes(2048)
-
-    stream.stop_stream()
-    stream.close()
-
-    pa.terminate()
+    for i in range(3):
+        print("hi")
 
 
 def execute(intent, text = None):
@@ -170,28 +157,27 @@ def execute(intent, text = None):
         get_news(text)
 
 
-execute("get_news", "reddit ")
-
-def guess():
-    max = input("Maximum: ")
-
-    answer = randint(0, int(max))
-
-    turns = 1
-
-    def game():
-    	global turns
-	    say("Guess a number between zero and " + answer)
-	    guess = input(dit moet veranderd worden)
-	    if (guess < answer):
-		    say("Guess higher!")
-		    turns = turns + 1
-		    game()
-	    elif (guess > answer):
-		    say("Guess lower!")
-		    turns = turns + 1
-		    game()
-	    else:
-		    say("Congratulations! You finished in " + str(turns) + " turns!")
-
-    game()
+snowboy("hh")
+# def guess():
+#     max = input("Maximum: ")
+#
+#     answer = randint(0, int(max))
+#
+#     turns = 1
+#
+#     def game():
+#         global turns
+#         say("Guess a number between zero and " + answer)
+#         guess = input(dit moet veranderd worden)
+#         if (guess < answer):
+#             say("Guess higher!")
+#             turns = turns + 1
+#             game()
+#         elif (guess > answer):
+#             say("Guess lower!")
+#             turns = turns + 1
+#             game()
+#         else:
+#             say("Congratulations! You finished in " + str(turns) + " turns!")
+#
+#     game()

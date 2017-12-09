@@ -19,9 +19,8 @@ FORMAT = pyaudio.paInt16  # Audio bit depth
 BUFFER_SIZE = 8192  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 
 
-
 # get_wav turns buffers into a wav file.
-def get_wav(data, rate):
+def get_wav(data, rate=44100):
     with io.BytesIO() as file:
         wa = wave.open(file, 'w')
         wa.setnchannels(1)
@@ -35,7 +34,7 @@ def get_wav(data, rate):
 
 # Google only accepts flac (snobs), get_flac turns the wav file into a flac_file.
 def get_flac(data):
-    base_path = "C:\\Users\\162891\AppData\Local\Programs\Python\Python36-32\Lib\site-packages\speech_recognition"
+    base_path = "C:\\Users\\Mart\\Desktop"
     flac_converter = os.path.join(base_path, "flac-win32.exe")  # For Windows x86 and x86-64.
     process = subprocess.Popen([
         flac_converter,
@@ -115,22 +114,19 @@ def get_wit(data, language="en-US"):
     return r.text
 
 
-def record(rate, device_index, num_channels = 1, ding = False, pa = pyaudio.PyAudio()):
+def record(rate = 44100, ding=False, pa=pyaudio.PyAudio(), start_s=0.2, stop_s=0.75):
 
     # First create the PyAudio object
-    pa.get_device_info_by_index(0)
-    print(num_channels)
-    START_COOLDOWN = int(rate / BUFFER_SIZE * 0.2)  # Start cooldown in seconds
-    STOP_COOLDOWN = int(rate / BUFFER_SIZE * 0.75)  # Stop cooldown in seconds
+    start_cooldown = int(rate / BUFFER_SIZE * start_s)  # Start cooldown in seconds
+    stop_cooldown = int(rate / BUFFER_SIZE * stop_s)  # Stop cooldown in seconds
 
     # Create a stream for recording
-    stream = pa.open(channels = num_channels,
+    stream = pa.open(channels=1,
                      format=FORMAT,
                      rate=rate,
                      input=True,
                      frames_per_buffer=BUFFER_SIZE,
                      )
-
 
     print("First be silent, calibrating silence")
     buffer = stream.read(int(rate/2))
@@ -146,7 +142,6 @@ def record(rate, device_index, num_channels = 1, ding = False, pa = pyaudio.PyAu
     counter_threshold_stop = 0
     counter_threshold_start = 0
 
-
     while True:
         buffer = stream.read(BUFFER_SIZE)
         level = audioop.rms(buffer, pa.get_sample_size(FORMAT))
@@ -157,7 +152,7 @@ def record(rate, device_index, num_channels = 1, ding = False, pa = pyaudio.PyAu
             frames = []
             counter_threshold_start = 0
         # If sound has been above threshold for n buffers, continue up the loop.
-        if counter_threshold_start > START_COOLDOWN:
+        if counter_threshold_start > start_cooldown:
             print("Recording Activated")
             while True:
                 buffer = stream.read(BUFFER_SIZE)
@@ -168,8 +163,8 @@ def record(rate, device_index, num_channels = 1, ding = False, pa = pyaudio.PyAu
                 else:
                     counter_threshold_stop += 1
                 # If sound has been below threshold for n buffers, stop recording.
-                if counter_threshold_stop > STOP_COOLDOWN:
-                    frames = frames[:-STOP_COOLDOWN]  # Removing the buffers written in the stop cooldown.
+                if counter_threshold_stop > stop_cooldown:
+                    frames = frames[:-stop_cooldown]  # Removing the buffers written in the stop cooldown.
                     break
             break
 

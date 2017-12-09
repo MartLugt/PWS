@@ -10,8 +10,9 @@ def parse(text):
                "get_time": {"time": 0, "what": 2, "get": 2},
                "set_time": {"time": 0, "set": 2, "change": 2},
                "get_mood": {"mood": 1, "how are you": 1},
-               "joke": {"joke": 0, "tell": 1},
+               "joke": {"joke": 0},
                "get_weather": {"weather": 0, "what": 2},
+               "get_news": {"news": 0, "BBC": 1, "sport": 1, "tech": 1}
                }
 
     confidences = {}
@@ -68,4 +69,4 @@ def parse(text):
     else:
         return "no_match", 0.0
 
-parse("search for whats the weather")
+parse("")
