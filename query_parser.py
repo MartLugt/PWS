@@ -12,6 +12,7 @@ def parse(text):
                "get_mood": {"mood": 1, "how are you": 1},
                "joke": {"joke": 0, "tell": 1},
                "get_weather": {"weather": 0, "what": 2},
+               "guess": {"guess the number": 0, "play": 1}
                }
 
     confidences = {}
