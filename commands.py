@@ -170,4 +170,28 @@ def execute(intent, text = None):
         get_news(text)
 
 
-snowboy("hi")
+execute("get_news", "reddit ")
+
+def guess():
+    max = input("Maximum: ")
+
+    answer = randint(0, int(max))
+
+    turns = 1
+
+    def game():
+    	global turns
+	    say("Guess a number between zero and " + answer)
+	    guess = input(dit moet veranderd worden)
+	    if (guess < answer):
+		    say("Guess higher!")
+		    turns = turns + 1
+		    game()
+	    elif (guess > answer):
+		    say("Guess lower!")
+		    turns = turns + 1
+		    game()
+	    else:
+		    say("Congratulations! You finished in " + str(turns) + " turns!")
+
+    game()
