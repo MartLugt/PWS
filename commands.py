@@ -173,7 +173,8 @@ def execute(intent, text = None):
 execute("get_news", "reddit ")
 
 def guess():
-    max = input("Maximum: ")
+    say("Set a number as maximum value")
+    max = record()
 
     answer = randint(0, int(max))
 
@@ -182,7 +183,7 @@ def guess():
     def game():
     	global turns
 	    say("Guess a number between zero and " + answer)
-	    guess = input(dit moet veranderd worden)
+	    guess = record()
 	    if (guess < answer):
 		    say("Guess higher!")
 		    turns = turns + 1
