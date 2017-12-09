@@ -174,9 +174,9 @@ execute("get_news", "reddit ")
 
 def guess():
     say("Set a number as maximum value")
-    max = record()
+    maximum = record()
 
-    answer = randint(0, int(max))
+    answer = randint(0, int(maximum))
 
     turns = 1
 
@@ -185,14 +185,14 @@ def guess():
 	    say("Guess a number between zero and " + answer)
 	    guess = record()
 	    if (guess < answer):
-		    say("Guess higher!")
-		    turns = turns + 1
-		    game()
+	        say("Guess higher!")
+		turns = turns + 1
+		game()
 	    elif (guess > answer):
-		    say("Guess lower!")
-		    turns = turns + 1
-		    game()
+		say("Guess lower!")
+		turns = turns + 1
+		game()
 	    else:
-		    say("Congratulations! You finished in " + str(turns) + " turns!")
+		say("Congratulations! You finished in " + str(turns) + " turns!")
 
     game()
