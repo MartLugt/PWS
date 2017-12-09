@@ -4,17 +4,29 @@
 # Good luck!
 import datetime
 import text_to_speech
+import speech_to_text as stt
 import requests
 from random import randint
+import pyaudio
+from io import BytesIO
+import wave
 from urllib.parse import urlencode
 
 dmood = {0: "I am very happy", 1: "I am fine", 2: "I am a bit tired", 3: "I have a headache", 4: "I am sick of your face", }
+
 
 def play(text, female=False):
     if female:
         text_to_speech.play(text_to_speech.get_watson(text, female=True))
     else:
         text_to_speech.play(text_to_speech.get_watson(text))
+
+
+def record():
+    frames = stt.record()
+    w = stt.get_wav(frames)
+    f = stt.get_flac(w)
+    return stt.get_google(f, 44100)
 
 # for example:
 
@@ -87,7 +99,6 @@ def search(text):
     if "for" in text:
         text.replace("for", "")
 
-
     url = "https://www.googleapis.com/customsearch/v1?parameters&{}".format(urlencode({
         "key": "AIzaSyDdsopTPMwh6kDCaSfBhctBzYiDm7VKjNs",
         "cx": "001287592891243700069:s6esochhcbm",
@@ -115,6 +126,37 @@ def search(text):
         play("The top result is %s." % title)
 
 
+def snowboy(text):
+    token = "fe0506fb0b11122ed1e16582ea0ae4f18a438196"
+    # play("Sure! What should the name be?")
+    frames = stt.record(ding=True)
+    w = stt.get_wav(frames)
+    f = stt.get_flac(w)
+    name = stt.get_google(f, 44100)
+    print(name)
+    # play("Ok! The name is %s. Now please say this name after each beep." % name)
+
+    file = BytesIO(w)
+    w = wave.open(file, "r")  # open the file with wave in r(read) mode
+
+    pa = pyaudio.PyAudio()
+    stream = pa.open(format=pa.get_format_from_width(w.getsampwidth()),
+                     channels=w.getnchannels(),
+                     rate=w.getframerate(),
+                     output=True)
+
+    data = w.readframes(2048)
+
+    while data:
+        stream.write(data)
+        data = w.readframes(2048)
+
+    stream.stop_stream()
+    stream.close()
+
+    pa.terminate()
+
+
 def execute(intent, text = None):
     if intent == "get_time":
         get_time(text)
@@ -128,4 +170,4 @@ def execute(intent, text = None):
         get_news(text)
 
 
-execute("get_news", "reddit ")
+snowboy("hi")
