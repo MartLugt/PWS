@@ -10,6 +10,9 @@ from random import randint
 import pyaudio
 from io import BytesIO
 import wave
+import json
+import icalendar
+from pytz import timezone
 from urllib.parse import urlencode
 
 dmood = {0: "I am very happy", 1: "I am fine", 2: "I am a bit tired", 3: "I have a headache", 4: "I am sick of your face", }
@@ -22,15 +25,16 @@ def play(text, female=False):
         text_to_speech.play(text_to_speech.get_watson(text))
 
 
-def record(text=True):
+def record(text=True, ding=True):
     if text:
-        frames = stt.record()
-        w = stt.get_wav(frames)
+        frames = stt.record(ding=ding)
+        w = stt.get_wav(frames)[0]
         f = stt.get_flac(w)
         return stt.get_google(f, 44100)
     else:
-        frames = stt.record()
-        return stt.get_wav(frames)
+        frames = stt.record(ding=ding)
+        print(stt.get_wav(frames))
+        return json.dumps(stt.get_wav(frames)[1].decode("utf-8"))
 
 # for example:
 
@@ -129,19 +133,72 @@ def search(text):
     else:
         play("The top result is %s." % title)
 
+def calendar(text):
+    url = "https://calendar.google.com/calendar/ical/martvanderlugt%40hetnet.nl/private-be9edc91db33c2af45984c4d72bb96fe/basic.ics"
+
+    cal = requests.get(url).content
+    gcal = icalendar.Calendar.from_ical(cal)
+
+    events = []
+
+    for component in gcal.walk():
+        if component.name == "VEVENT":
+            start = component.get("dtstart").dt
+            end = component.get("dtend").dt
+
+            if type(start) is datetime.date:
+                start = datetime.datetime.combine(start, datetime.time())
+            if type(end) is datetime.date:
+                end = datetime.datetime.combine(end, datetime.time())
+
+            start = start.astimezone(timezone("Europe/Amsterdam"))
+            end = end.astimezone(timezone("Europe/Amsterdam"))
+
+            event = {"summary": component.get("summary"),
+                     "location": component.get("location"),
+                     "start": start,
+                     "end": end}
+
+            print(event["summary"])
+
+            events.append(event)
+
+    events = sorted(events, key=lambda k: k["start"])
+    print(events)
+
+
 
 def snowboy(text):
     token = "fe0506fb0b11122ed1e16582ea0ae4f18a438196"
     # play("Sure! What should the name be?")
-    frames = stt.record(ding=True)
-    w = stt.get_wav(frames)
-    f = stt.get_flac(w)
-    name = stt.get_google(f, 44100)
+    name = record()
     print(name)
     # play("Ok! The name is %s. Now please say this name after each beep." % name)
 
-    for i in range(3):
-        print("hi")
+    wav1 = record(text=False)
+    wav2 = record(text=False)
+    wav3 = record(text=False)
+
+    url = "https://snowboy.kitt.ai/api/v1/train/"
+
+    data = {
+        "name": name,
+        "language": "en",
+        "microphone": "None",
+        "token": token,
+        "voice_samples": [
+            {"wave": wav1},
+            {"wave": wav2},
+            {"wave": wav3}
+        ]
+    }
+
+    print(data)
+
+    response = requests.post(url, json=data)
+
+    with open((name + ".pmdl"), "w") as outfile:
+        outfile.write(response.content)
 
 
 def execute(intent, text = None):
