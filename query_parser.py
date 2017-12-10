@@ -12,7 +12,11 @@ def parse(text):
                "get_mood": {"mood": 1, "how are you": 1},
                "joke": {"joke": 0},
                "get_weather": {"weather": 0, "what": 2},
+<<<<<<< HEAD
                "get_news": {"news": 0, "BBC": 1, "sport": 2, "tech": 2, "business": 2},
+=======
+               "guess": {"guess the number": 0, "play": 1}
+>>>>>>> origin/dev
                }
 
     confidences = {}
@@ -69,4 +73,8 @@ def parse(text):
     else:
         return "no_match", 0.0
 
+<<<<<<< HEAD
 parse("")
+=======
+parse("search for whats the weather")
+>>>>>>> origin/dev
