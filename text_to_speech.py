@@ -10,8 +10,8 @@ pa = pyaudio.PyAudio()
 
 
 def get_watson(text, female = False):
-    username = "803a2c40-7b0c-4110-8e0b-cb3deade4650"
-    password = "F3o4PmkFIEpu"
+    username = "5dca8c33-2c17-4c6b-b4bd-98175869f6fd"
+    password = "Ki3o5DRoA5hH"
     url = "https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize"
 
     if female:
@@ -49,8 +49,6 @@ def play(request):
 
     stream.stop_stream()
     stream.close()
-
-    pa.terminate()
 
 
 def play_ding():

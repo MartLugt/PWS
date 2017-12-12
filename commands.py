@@ -15,22 +15,24 @@ import icalendar
 from pytz import timezone
 from urllib.parse import urlencode
 
-dmood = {0: "I am very happy", 1: "I am fine", 2: "I am a bit tired", 3: "I have a headache", 4: "I am sick of your face", }
+dmood = {0: "I am very happy!", 1: "I am fine.", 2: "I am a bit tired...",
+         3: "I have a headache.", 4: "Please ask me some useful questions.", }
 
 
 def play(text, female=False):
     if female:
         text_to_speech.play(text_to_speech.get_watson(text, female=True))
     else:
-        text_to_speech.play(text_to_speech.get_watson(text))
+        t = text_to_speech.get_watson(text)
+        text_to_speech.play(t)
 
 
-def record(text=True, ding=True):
+def record(text=True, ding=True, full=False):
     if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
         f = stt.get_flac(w)
-        return stt.get_google(f, 44100)
+        return stt.get_google(f, 44100, full=full)
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))
@@ -133,8 +135,10 @@ def search(text):
     else:
         play("The top result is %s." % title)
 
+
 def calendar(text):
-    url = "https://calendar.google.com/calendar/ical/martvanderlugt%40hetnet.nl/private-be9edc91db33c2af45984c4d72bb96fe/basic.ics"
+    url = "https://calendar.google.com/calendar/ical/martvanderlugt%40hetnet.nl/" \
+          "private-be9edc91db33c2af45984c4d72bb96fe/basic.ics"
 
     cal = requests.get(url).content
     gcal = icalendar.Calendar.from_ical(cal)
@@ -166,6 +170,69 @@ def calendar(text):
     events = sorted(events, key=lambda k: k["start"])
     print(events)
 
+    upcomming_events = []
+
+    for ev in events:
+        if ev["start"] >= datetime.datetime.now(tz=timezone("Europe/Amsterdam")):
+            upcomming_events.append(ev)
+            print(ev["start"], "True")
+        else:
+            print(ev["start"], "False")
+
+    text = ""
+
+    for ev in upcomming_events:
+        if ev["start"].strftime("%H:%M") == "00:00":
+            time = ev["start"].strftime("On %e %B")
+        else:
+            time = ev["start"].strftime("On %e %B, at %H:%M")
+
+        text += "%s, you have %s" % (time, ev["summary"])
+
+        if ev["location"] != "":
+            text += " at %s. " % ev["location"]
+        else:
+            text += ". "
+
+    play(text)
+
+
+def get_num(text):
+    while True:
+        res_full = record(full=True)
+        print(res_full)
+        if not res_full:
+            play(text)
+            continue
+        for res in res_full["alternative"]:
+            try:
+                return int(res["transcript"])
+            except ValueError:
+                continue
+        play(text)
+
+
+def number_guess(text):
+    play("Set a number as maximum value")
+    maximum = get_num("That doesn't sound like a number to me...")
+
+    answer = randint(0, maximum)
+    play("Guess a number between zero and " + str(maximum))
+
+    def game(turns):
+        guess = get_num("That ain't no number motherfucker!")
+        if int(guess) < int(answer):
+            play("Guess higher!")
+            turns = turns + 1
+            game(turns)
+        elif int(guess) > int(answer):
+            play("Guess lower!")
+            turns = turns + 1
+            game(turns)
+        else:
+            play("Congratulations! You finished in " + str(turns) + " turns!")
+
+    game(1)
 
 
 def snowboy(text):
@@ -212,58 +279,10 @@ def execute(intent, text = None):
         search(text)
     elif intent == "get_news":
         get_news(text)
+    elif intent == "get_cal":
+        calendar(text)
+    elif intent == "guess":
+        number_guess(text)
 
 
-<<<<<<< HEAD
-snowboy("hh")
-# def guess():
-#     max = input("Maximum: ")
-#
-#     answer = randint(0, int(max))
-#
-#     turns = 1
-#
-#     def game():
-#         global turns
-#         say("Guess a number between zero and " + answer)
-#         guess = input(dit moet veranderd worden)
-#         if (guess < answer):
-#             say("Guess higher!")
-#             turns = turns + 1
-#             game()
-#         elif (guess > answer):
-#             say("Guess lower!")
-#             turns = turns + 1
-#             game()
-#         else:
-#             say("Congratulations! You finished in " + str(turns) + " turns!")
-#
-#     game()
-=======
-execute("get_news", "reddit ")
-
-def guess():
-    say("Set a number as maximum value")
-    maximum = record()
-
-    answer = randint(0, int(maximum))
-
-    turns = 1
-
-    def game():
-    	global turns
-	    say("Guess a number between zero and " + answer)
-	    guess = record()
-	    if (guess < answer):
-	        say("Guess higher!")
-		turns = turns + 1
-		game()
-	    elif (guess > answer):
-		say("Guess lower!")
-		turns = turns + 1
-		game()
-	    else:
-		say("Congratulations! You finished in " + str(turns) + " turns!")
-
-    game()
->>>>>>> origin/dev
+execute("get_cal", "reddit ")

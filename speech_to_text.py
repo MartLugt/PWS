@@ -73,7 +73,7 @@ def get_flac_linux(data):
 
 
 # get_google sends the audio to google and returns the line with the best confidence.
-def get_google(data, rate, language="en-US"):
+def get_google(data, rate, language="en-US", full=False):
     url = "http://www.google.com/speech-api/v2/recognize?{}".format(urlencode({
         "client": "chromium",
         "lang": language,
@@ -83,7 +83,6 @@ def get_google(data, rate, language="en-US"):
     headers = {"Content-Type": "audio/x-flac; rate={}".format(rate)}
     response = requests.post(url, headers=headers, data=data)
     # Now parse it into the sentence with the best confidence
-    print(response.text)
 
     result_full = []
     for line in response.text.split('\n'):
@@ -93,6 +92,9 @@ def get_google(data, rate, language="en-US"):
         if len(r) != 0:
             result_full = r[0]
             break
+
+    if full:
+        return result_full
 
     if not isinstance(result_full, dict):
         print(result_full)
