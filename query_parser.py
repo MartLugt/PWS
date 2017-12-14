@@ -44,7 +44,7 @@ def parse(text):
         print("keywords with 0:", str(zero_keywords))
 
         if matches == 1 and points == 0:  # another weird shadow case
-            confidences[intent] = 1
+            confidences[intent] = 1.0
         elif matches == 0:
             confidences[intent] = 0
         else:
@@ -69,5 +69,3 @@ def parse(text):
         return min(confidences, key=confidences.get), min(confidences.values())
     else:
         return "no_match", 0.0
-
-parse("search for whats the weather")

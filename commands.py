@@ -283,6 +283,3 @@ def execute(intent, text = None):
         calendar(text)
     elif intent == "guess":
         number_guess(text)
-
-
-execute("get_cal", "reddit ")

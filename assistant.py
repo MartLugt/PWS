@@ -11,8 +11,6 @@ model = "piet.pmdl"
 rate = 44100
 
 
-# TODO: Make threshold detection constant somehow. It now sucks, because it triggers immediatly, probably because of the ding.
-
 def callback():
     detector.terminate()
 
@@ -23,7 +21,8 @@ def callback():
 
     intent = query_parser.parse(text)
 
-    commands.exec(intent)
+    commands.execute(intent)
+
 
 detector = sb.HotwordDetector(model, sensitivity=0.7)
 print("Listening...")
