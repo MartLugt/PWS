@@ -2,15 +2,14 @@ import snowboydecoder as sb
 import text_to_speech
 import speech_to_text
 import query_parser
+import commands
 import sys
 import pyaudio
 import time
 
-model = "unicorn.pmdl"
+model = "piet.pmdl"
 rate = 44100
 
-
-# TODO: Make threshold detection constant somehow. It now sucks, because it triggers immediatly, probably because of the ding.
 
 def callback():
     detector.terminate()
@@ -20,8 +19,10 @@ def callback():
     flac = speech_to_text.get_flac_linux(wav)
     text = speech_to_text.get_google(flac, rate)
 
-    sound = text_to_speech.get_watson(text)
-    text_to_speech.play(sound)
+    intent = query_parser.parse(text)
+
+    commands.execute(intent)
+
 
 detector = sb.HotwordDetector(model, sensitivity=0.7)
 print("Listening...")

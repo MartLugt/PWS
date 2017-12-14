@@ -1,4 +1,7 @@
 # Speech assistant
+
+## This is the RPI branch.
+
 In this repository all of the code files for the assistant are stored.
 
 The text can be found at [Overleaf](https://www.overleaf.com/read/sfsdgrsfgmfb)
