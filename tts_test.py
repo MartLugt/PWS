@@ -11,7 +11,7 @@ import requests
 
 BUFFER_SIZE = 4096
 
-text = "It is ya boy mama. I like pink fluffy unicorns dancing on rainbows hahaha pink fluffy unicorns dancing on rainbows. Ya boiiiii. hahaha lol unicorn rainbow poop."
+text = "VoiceRSS is a text to speech developed in 2010 by Voice RSS. Voice RSS is free up to 350 daily requests of up to 100 KB each. It has 17 languages, including English and Dutch. It however only has one voice per language. The quality of the speech isn't great. It sounds very muffled and not much like a human."
 
 
 def get_voicerss():
@@ -74,16 +74,21 @@ def play(request):
 
 rss_data = get_voicerss()
 print("Playing voicerss:")
-play(rss_data)
+# play(rss_data)
 
 
 ibm_data = get_watson()
 print("Playing ibm watson:")
-play(ibm_data)
+# play(ibm_data)
 
 # From this point on, only the Linux will succesfully run.
 print("Playing flite:")
-os.system("flite -voice ~/cmu_us_awb.flitevox \"" + text + "\"")
+# os.system("flite -voice ~/cmu_us_awb.flitevox \"" + text + "\"")
+
+print("Playing festival:")
+print("echo \"%s\" | festival --tts" % text)
+os.system("echo \"%s\" | festival --tts" % text)
+
 
 print("Playing espeak:")
-os.system("espeak \"" + text + "\"")
+# os.system("espeak \"" + text + "\"")

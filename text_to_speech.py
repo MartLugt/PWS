@@ -9,19 +9,27 @@ BUFFER_SIZE = 2048
 pa = pyaudio.PyAudio()
 
 
-def get_watson(text):
-    username = "6014826e-8384-4738-8e1f-16a398ee3f95"
-    password = "kbfIz4iR3xGi"
+def get_watson(text, female = False):
+    username = "5dca8c33-2c17-4c6b-b4bd-98175869f6fd"
+    password = "Ki3o5DRoA5hH"
     url = "https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize"
 
-    params = (
-        ("accept", "audio/wav"),
-        ("text", text),
-        ("voice", "en-US_MichaelVoice"),
-    )
+    if female:
+        params = (
+            ("accept", "audio/wav"),
+            ("text", text),
+            ("voice", "en-US_LisaVoice"),
+        )
+    else:
+        params = (
+            ("accept", "audio/wav"),
+            ("text", text),
+            ("voice", "en-US_MichaelVoice"),
+        )
 
     request = requests.get(url, params = params, auth=(username, password))
     return request
+
 
 def play(request):
     # Turn the request data into a temperory file that is held in memory as a string.
@@ -41,8 +49,6 @@ def play(request):
 
     stream.stop_stream()
     stream.close()
-
-    pa.terminate()
 
 
 def play_ding():
