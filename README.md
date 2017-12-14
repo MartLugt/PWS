@@ -1,6 +1,6 @@
 # Speech assistant
-### This is the develpment branch
-All changes should be commited to this branch and this branch should then be merged with the release branches.
+
+## This is the RPI branch.
 
 In this repository all of the code files for the assistant are stored.
 

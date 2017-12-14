@@ -17,7 +17,7 @@ import text_to_speech
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
-BUFFER_SIZE = 8192  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+
 pa = pyaudio.PyAudio()
 STREAM = pa.open(channels=1,
                  format=FORMAT,
@@ -25,6 +25,9 @@ STREAM = pa.open(channels=1,
                  input=True,
                  frames_per_buffer=BUFFER_SIZE,
                   )
+
+BUFFER_SIZE = 16384  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+
 
 
 # get_wav turns buffers into a wav file.
