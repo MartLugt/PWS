@@ -40,8 +40,8 @@ def record(text=True, ding=True, full=False):
 
 # for example:
 
-def get_time_place(text):
-    url = "https://maps.googleapis.com/maps/api/timezone/xml?location"
+#def get_time_place(text):
+#    url = "https://maps.googleapis.com/maps/api/timezone/xml?location"
     
 
 # This intent says the current time.
