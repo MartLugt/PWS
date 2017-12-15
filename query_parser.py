@@ -8,7 +8,7 @@ def parse(text):
     # The intents higher up in the dictionary are more important and will be picked faster.
     intents = {"search": {"search": 0},
                "get_time": {"time": 0, "what": 2, "get": 2},
-               "get_time_place": {"time": 0, "in": 0},
+               #"get_time_place": {"time": 0, "in": 0},
                "set_time": {"time": 0, "set": 2, "change": 2},
                "get_mood": {"mood": 1, "how are you": 1},
                "joke": {"joke": 0},
