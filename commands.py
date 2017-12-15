@@ -48,6 +48,7 @@ def get_time(text):
     text_to_speech.play(text_to_speech.get_watson("It currently is " + time + "."))
 
 
+
 def get_weather(text):
     r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/waddinxveen.json")
     print(r.json())
