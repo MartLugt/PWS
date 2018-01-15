@@ -40,12 +40,13 @@ Used to find out what device index to use for recording and playback on the Rasp
 #### fromfile.py
 Python script used for testing of the speech to text engines.  
 Uses a .wav file and returns the text as recognised by a lot of different engines.  
+
 Based on [a file from the speech_recognition library](https://github.com/Uberi/speech_recognition/blob/master/examples/audio_transcribe.py).
 
 
 #### query_parser.py
 Python script that takes text and returns the intent that it thinks you had.  
-Basically a bunch of if statements but simplified.
+Basically a bunch of if statements but simplified and not hard coded.
 
 
 #### speech_to_text.py
@@ -58,4 +59,10 @@ Turns text into speech using IBM Watson.
 #### tts_test.py
 Python script for testing different text to speech engines and api's to turn text into speech and play it.  
 
+## TODO
+
+#### Make SNOWBOY command work better
+automatic switching to the new hotword/being able to switch to another hotword using the voice commands
+
+#### Add functions.
 
