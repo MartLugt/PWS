@@ -66,3 +66,4 @@ automatic switching to the new hotword/being able to switch to another hotword u
 
 #### Add functions.
 
+#### Do things
