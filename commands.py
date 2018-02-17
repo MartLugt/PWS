@@ -270,6 +270,7 @@ def snowboy(text):
 
 
 def execute(intent, text = None):
+    print(intent)
     if intent == "get_time":
         get_time(text)
     elif intent == "get_weather":

@@ -7,7 +7,7 @@ import sys
 import pyaudio
 import time
 
-model = "piet.pmdl"
+model = "Jarvis.pmdl"
 rate = 44100
 
 
