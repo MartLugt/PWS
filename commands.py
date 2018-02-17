@@ -31,7 +31,7 @@ def record(text=True, ding=True, full=False):
     if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
-        f = stt.get_flac(w)
+        f = stt.get_flac_linux(w)
         return stt.get_google(f, 44100, full=full)
     else:
         frames = stt.record(ding=ding)
@@ -49,13 +49,13 @@ def get_time(text):
 
 
 def get_weather(text):
-    r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/waddinxveen.json")
+    r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/gouda.json")
     print(r.json())
     info = r.json()["current_observation"]
 
     temp = info["temp_c"]
     weather = info["weather"]
-    play("The weather in Waddinxveen is %s with a temperature of %s." % (weather, temp))
+    play("The weather in Gouda is %s with a temperature of %s." % (weather, temp))
 
 
 def get_news(text):
@@ -215,13 +215,13 @@ def get_num(text):
 
 def number_guess(text):
     play("Set a number as maximum value")
-    maximum = get_num("That doesn't sound like a number to me...")
+    maximum = get_num("That doesn't sound like a whole number to me...")
 
     answer = randint(0, maximum)
     play("Guess a number between zero and " + str(maximum))
 
     def game(turns):
-        guess = get_num("That ain't no number motherfucker!")
+        guess = get_num("Please guess an integer")
         if int(guess) < int(answer):
             play("Guess higher!")
             turns = turns + 1
@@ -268,6 +268,20 @@ def snowboy(text):
     with open((name + ".pmdl"), "w") as outfile:
         outfile.write(response.content)
 
+def joke(text):
+    j = randint(0,5)
+    if j == 0:
+        print(0)
+    elif j == 1:
+        print(1)
+    elif j == 2:
+        print(2)
+    elif j == 3:
+        print(3)
+    elif j == 4:
+        print(4)
+    elif j == 5:
+        print(5)
 
 def execute(intent, text = None):
     intent = intent[0]
@@ -285,3 +299,5 @@ def execute(intent, text = None):
         calendar(text)
     elif intent == "guess":
         number_guess(text)
+    elif intent == "joke":
+        print("joke")
