@@ -22,7 +22,7 @@ def callback():
     intent = query_parser.parse(text)
     print(intent)
 
-    commands.execute(intent)
+    commands.execute(intent, text)
 
 
 detector = sb.HotwordDetector(model, sensitivity=0.7)

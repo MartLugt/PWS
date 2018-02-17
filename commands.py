@@ -31,8 +31,9 @@ def record(text=True, ding=True, full=False):
     if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
-        f = stt.get_flac(w)
-        return stt.get_google(f, 44100, full=full)
+        f = stt.get_flac_linux(w)
+        return stt.get_google(
+f, 44100, full=full)
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))
@@ -270,7 +271,7 @@ def snowboy(text):
 
 
 def execute(intent, text = None):
-    print(intent)
+    intent = intent[0]
     if intent == "get_time":
         get_time(text)
     elif intent == "get_weather":
