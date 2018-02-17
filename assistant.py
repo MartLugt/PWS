@@ -20,6 +20,7 @@ def callback():
     text = speech_to_text.get_google(flac, rate)
 
     intent = query_parser.parse(text)
+    print(intent)
 
     commands.execute(intent)
 

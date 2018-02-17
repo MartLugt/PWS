@@ -101,6 +101,7 @@ def get_news(text):
 def get_mood(text):
     mood = randint(0, 4)
     text_to_speech.play(text_to_speech.get_watson(dmood[mood]))
+    print("Mood has been executed")
 
 
 def search(text):
