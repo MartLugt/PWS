@@ -269,9 +269,9 @@ def snowboy(text):
         outfile.write(response.content)
 
 def joke(text):
-    j = randint(0,5)
+    j = 0 #randint(0,5)
     if j == 0:
-        print(0)
+        play("What is a skeleton's favorite instrument? A trombone.")
     elif j == 1:
         print(1)
     elif j == 2:
