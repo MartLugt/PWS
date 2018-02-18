@@ -34,7 +34,7 @@ def record(text=True, ding=True, full=False):
         f = stt.get_flac_linux(w)
         text = stt.get_google(f, 44100, full=full)
         print(text)
-        if text == []:
+        if not isinstance(text, dict):
             play("Sorry, I did not understand...")
             record(text, ding, full)
     else:
