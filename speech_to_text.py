@@ -103,9 +103,9 @@ def get_google(data, rate, language="en-US", full=False):
     if full:
         return result_full
 
-    if not isinstance(result_full, dict):
-        print(result_full)
-        raise ValueError
+    # if not isinstance(result_full, dict):
+    #     print(result_full)
+    #     raise ValueError
 
     result_best = result_full["alternative"][0]
     if "confidence" in result_best:
