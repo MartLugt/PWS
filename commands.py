@@ -300,4 +300,4 @@ def execute(intent, text = None):
     elif intent == "guess":
         number_guess(text)
     elif intent == "joke":
-        print("joke")
+        joke(text)
