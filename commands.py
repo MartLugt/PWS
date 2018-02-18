@@ -303,10 +303,10 @@ def joke(text):
         record()
         play(lines[11])
 
-def make_note:
+def make_note(text):
     play("Note made")
 
-def get_notes:
+def get_notes(text):
     play("Got notes")
 
 def execute(intent, text = None):
