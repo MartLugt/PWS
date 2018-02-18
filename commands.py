@@ -303,6 +303,12 @@ def joke(text):
         record()
         play(lines[11])
 
+def make_note:
+    play("Note made")
+
+def get_notes:
+    play("Got notes")
+
 def execute(intent, text = None):
     intent = intent[0]
     if intent == "get_time":
