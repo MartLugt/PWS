@@ -32,7 +32,10 @@ def record(text=True, ding=True, full=False):
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
         f = stt.get_flac_linux(w)
-        return stt.get_google(f, 44100, full=full)
+        text = stt.get_google(f, 44100, full=full)
+        if not text:
+            play("Sorry, I did not understand...")
+            record(text, ding, full)
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))
