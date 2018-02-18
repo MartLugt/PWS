@@ -269,19 +269,33 @@ def snowboy(text):
         outfile.write(response.content)
 
 def joke(text):
-    j = 0 #randint(0,5)
-    if j == 0:
-        play("What is a skeleton's favorite instrument? A trombone.")
-    elif j == 1:
-        print(1)
-    elif j == 2:
-        print(2)
-    elif j == 3:
-        print(3)
-    elif j == 4:
-        print(4)
-    elif j == 5:
-        print(5)
+    r = randint(0,5)
+    j = open('jokes.txt')
+    lines = j.readlines()
+    if r == 0:
+        play(lines[0])
+        record(text)
+        play(lines[1])
+    elif r == 1:
+        play(lines[2])
+        record(text)
+        play(lines[3])
+    elif r == 2:
+        play(lines[4])
+        record(text)
+        play(lines[5])
+    elif r == 3:
+        play(lines[6])
+        record(text)
+        play(lines[7])
+    elif r == 4:
+        play(lines[8])
+        record(text)
+        play(lines[9])
+    elif r == 5:
+        play(lines[10])
+        record(text)
+        play(lines[11])
 
 def execute(intent, text = None):
     intent = intent[0]
