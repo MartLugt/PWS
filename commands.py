@@ -206,10 +206,9 @@ def get_num(text):
     while True:
         res_full = record(full=True)
         print(res_full)
-        if not res_full:
-            play(text)
-            continue
         for res in res_full["alternative"]:
+            print(res)
+            print(res["transcript"])
             try:
                 return int(res["transcript"])
             except ValueError:
