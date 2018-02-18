@@ -21,12 +21,17 @@ FORMAT = pyaudio.paInt16  # Audio bit depth
 BUFFER_SIZE = 16384  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 
 pa = pyaudio.PyAudio()
-STREAM = pa.open(channels=1,
-                 format=FORMAT,
-                 rate=44100,
-                 input=True,
-                 frames_per_buffer=BUFFER_SIZE,
-                  )
+STREAM = None
+
+
+def init():
+    global STREAM
+    STREAM = pa.open(channels=1,
+                     format=FORMAT,
+                     rate=44100,
+                     input=True,
+                     frames_per_buffer=BUFFER_SIZE,
+                     )
 
 
 # get_wav turns buffers into a wav file.
@@ -127,7 +132,7 @@ def get_wit(data, language="en-US"):
     return r.text
 
 
-def record(rate = 44100, ding=False, start_s=0.2, stop_s=0.75):
+def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
     print("Something Random")
     # First create the PyAudio object
     start_cooldown = int(rate / BUFFER_SIZE * start_s)  # Start cooldown in seconds
@@ -136,7 +141,7 @@ def record(rate = 44100, ding=False, start_s=0.2, stop_s=0.75):
     STREAM.start_stream()
 
     print("First be silent, calibrating silence")
-    buffer = STREAM.read(int(rate/2))
+    buffer = STREAM.read(int(rate / 2))
 
     threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
 
