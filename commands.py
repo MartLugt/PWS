@@ -231,10 +231,10 @@ def number_guess(text):
             turns = turns + 1
             game(turns)
         else:
-            if turns >= 1:
-                play("Congratulations! You finished in " + str(turns) + " turns!")
-            else:
+            if turns == 1:
                 play("Congratulations! You finished in " + str(turns) + " turn!")
+            else:
+                play("Congratulations! You finished in " + str(turns) + " turns!")
 
     game(1)
 
