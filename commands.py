@@ -207,6 +207,8 @@ def get_num(text):
         res_full = record(full=True)
         print(res_full)
         for res in res_full["alternative"]:
+            print(res)
+            print(res["transcript"])
             try:
                 return int(res["transcript"])
             except ValueError:
