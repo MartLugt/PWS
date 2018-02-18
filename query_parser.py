@@ -11,9 +11,11 @@ def parse(text):
                "set_time": {"time": 0, "set": 2, "change": 2},
                "get_mood": {"mood": 1, "how are you": 1},
                "joke": {"joke": 0},
-               "get_weather": {"weather": 0, "what": 2},
+               "get_weather": {"weather": 1, "forecast":1},
                "get_news": {"news": 0, "BBC": 1, "sport": 2, "tech": 2, "business": 2},
-               "guess": {"guess": 0, "play": 1, "number": 1}
+               "calendar": {"event": 2, "calendar": 1},
+               "snowboy": {"snowboy": 1, "name": 2},
+               "guess": {"guess": 0, "play": 1, "number": 1},
                }
 
     confidences = {}
