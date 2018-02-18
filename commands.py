@@ -327,3 +327,7 @@ def execute(intent, text = None):
         number_guess(text)
     elif intent == "joke":
         joke(text)
+    elif intent == "get_notes":
+        get_notes(text)
+    elif intent == "make_notes":
+        make_note(text)
