@@ -128,7 +128,7 @@ def get_wit(data, language="en-US"):
 
 
 def record(rate = 44100, ding=False, start_s=0.2, stop_s=0.75):
-
+    print("Something Random")
     # First create the PyAudio object
     start_cooldown = int(rate / BUFFER_SIZE * start_s)  # Start cooldown in seconds
     stop_cooldown = int(rate / BUFFER_SIZE * stop_s)  # Stop cooldown in seconds
