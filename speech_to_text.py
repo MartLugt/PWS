@@ -18,7 +18,7 @@ import text_to_speech
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
 
-BUFFER_SIZE = 4096  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
+BUFFER_SIZE = 16384  # Buffer size. The smaller the more accurate. Will overflow on Pi if too small.
 
 pa = pyaudio.PyAudio()
 STREAM = pa.open(channels=1,
@@ -127,8 +127,8 @@ def get_wit(data, language="en-US"):
     return r.text
 
 
-def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
-
+def record(rate = 44100, ding=False, start_s=0.2, stop_s=0.75):
+    print("Something Random")
     # First create the PyAudio object
     start_cooldown = int(rate / BUFFER_SIZE * start_s)  # Start cooldown in seconds
     stop_cooldown = int(rate / BUFFER_SIZE * stop_s)  # Stop cooldown in seconds

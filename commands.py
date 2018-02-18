@@ -31,7 +31,7 @@ def record(text=True, ding=True, full=False):
     if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
-        f = stt.get_flac(w)
+        f = stt.get_flac_linux(w)
         return stt.get_google(f, 44100, full=full)
     else:
         frames = stt.record(ding=ding)
@@ -49,36 +49,13 @@ def get_time(text):
 
 
 def get_weather(text):
-    if "tomorrow" in text:  # Get the forecast for the next day.
-        r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/forecast/q/nl/waddinxveen.json")
-        if "night" in text:
-            forecast = r.json()["forecast"]["txt_forecast"]["forecastday"][3]
-        else:
-            forecast = r.json()["forecast"]["txt_forecast"]["forecastday"][2]
+    r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/gouda.json")
+    print(r.json())
+    info = r.json()["current_observation"]
 
-        print(forecast)
-
-        play("The weather in Waddinxveen on %s is coming up right now! %s " %
-             (forecast["title"], forecast["fcttext_metric"]))
-
-    if "forecast" in text:
-        r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/forecast/q/nl/waddinxveen.json")
-        weather = r.json()
-        text = ""
-        for day in weather["forecast"]["txt_forecast"]["forecastday"]:
-            if "Night" not in day["title"]:  # Filter out the forecast for the night.
-                text += "The forecast for %s. %s " % (day["title"], day["fcttext_metric"])
-
-        play(text)
-
-    else:
-        r = requests.get("http://api.wunderground.com/api/49abb482ddb6b5b8/conditions/q/nl/waddinxveen.json")
-        print(r.json())
-        info = r.json()["current_observation"]
-
-        temp = info["temp_c"]
-        weather = info["weather"]
-        play("The weather in Waddinxveen is %s with a temperature of %s. " % (weather, temp))
+    temp = info["temp_c"]
+    weather = info["weather"]
+    play("The weather in Gouda is %s with a temperature of %s." % (weather, temp))
 
 
 def get_news(text):
@@ -122,8 +99,9 @@ def get_news(text):
 
 
 def get_mood(text):
-    mood = randint(0, len(dmood))
+    mood = randint(0, 4)
     text_to_speech.play(text_to_speech.get_watson(dmood[mood]))
+    print("Mood has been executed")
 
 
 def search(text):
@@ -237,13 +215,13 @@ def get_num(text):
 
 def number_guess(text):
     play("Set a number as maximum value")
-    maximum = get_num("That doesn't sound like a number to me...")
+    maximum = get_num("That doesn't sound like a whole number to me...")
 
     answer = randint(0, maximum)
     play("Guess a number between zero and " + str(maximum))
 
     def game(turns):
-        guess = get_num("That ain't no number motherfucker!")
+        guess = get_num("Please guess an integer")
         if int(guess) < int(answer):
             play("Guess higher!")
             turns = turns + 1
@@ -253,17 +231,20 @@ def number_guess(text):
             turns = turns + 1
             game(turns)
         else:
-            play("Congratulations! You finished in " + str(turns) + " turns!")
+            if turns == 1:
+                play("Congratulations! You finished in " + str(turns) + " turn!")
+            else:
+                play("Congratulations! You finished in " + str(turns) + " turns!")
 
     game(1)
 
 
 def snowboy(text):
     token = "fe0506fb0b11122ed1e16582ea0ae4f18a438196"
-    play("Sure! What should the name be?")
+    # play("Sure! What should the name be?")
     name = record()
     print(name)
-    play("Ok! The name is %s. Now please say this name after each beep." % name)
+    # play("Ok! The name is %s. Now please say this name after each beep." % name)
 
     wav1 = record(text=False)
     wav2 = record(text=False)
@@ -290,8 +271,37 @@ def snowboy(text):
     with open((name + ".pmdl"), "w") as outfile:
         outfile.write(response.content)
 
+def joke(text):
+    r = randint(0,5)
+    j = open('jokes.txt')
+    lines = j.readlines()
+    if r == 0:
+        play(lines[0])
+        record(text)
+        play(lines[1])
+    elif r == 1:
+        play(lines[2])
+        record(text)
+        play(lines[3])
+    elif r == 2:
+        play(lines[4])
+        record(text)
+        play(lines[5])
+    elif r == 3:
+        play(lines[6])
+        record(text)
+        play(lines[7])
+    elif r == 4:
+        play(lines[8])
+        record(text)
+        play(lines[9])
+    elif r == 5:
+        play(lines[10])
+        record(text)
+        play(lines[11])
 
-def execute(intent, text):
+def execute(intent, text = None):
+    intent = intent[0]
     if intent == "get_time":
         get_time(text)
     elif intent == "get_weather":
@@ -306,8 +316,5 @@ def execute(intent, text):
         calendar(text)
     elif intent == "guess":
         number_guess(text)
-    elif intent == "snowboy":
-        snowboy(text)
-
-
-execute("get_weather", "forecast")
+    elif intent == "joke":
+        joke(text)

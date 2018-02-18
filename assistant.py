@@ -7,19 +7,20 @@ import sys
 import pyaudio
 import time
 
-model = "piet.pmdl"
+model = "Jarvis.pmdl"
 rate = 44100
 
 
 def callback():
     detector.terminate()
 
-    frames = speech_to_text.record(rate=rate, ding=True)
-    wav = speech_to_text.get_wav(frames, rate)
+    frames = speech_to_text.record(rate = rate, ding = True)
+    wav = speech_to_text.get_wav(frames, rate)[0]
     flac = speech_to_text.get_flac_linux(wav)
     text = speech_to_text.get_google(flac, rate)
 
     intent = query_parser.parse(text)
+    print(intent)
 
     commands.execute(intent, text)
 

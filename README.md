@@ -60,4 +60,3 @@ Turns text into speech using IBM Watson.
 #### tts_test.py
 Python script for testing different text to speech engines and api's to turn text into speech and play it.  
 
-
