@@ -33,7 +33,8 @@ def record(text=True, ding=True, full=False):
         w = stt.get_wav(frames)[0]
         f = stt.get_flac_linux(w)
         text = stt.get_google(f, 44100, full=full)
-        if not text:
+        print(text)
+        if text == []:
             play("Sorry, I did not understand...")
             record(text, ding, full)
     else:
