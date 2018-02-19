@@ -105,7 +105,7 @@ def get_google(data, rate, language="en-US", full=False):
 
     if not isinstance(result_full, dict):
         print(result_full)
-        return False
+        raise ValueError
 
     result_best = result_full["alternative"][0]
     if "confidence" in result_best:
@@ -133,7 +133,9 @@ def get_wit(data, language="en-US"):
 
 
 def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
-    print("Something Random")
+    init()
+    global STREAM
+
     # First create the PyAudio object
     start_cooldown = int(rate / BUFFER_SIZE * start_s)  # Start cooldown in seconds
     stop_cooldown = int(rate / BUFFER_SIZE * stop_s)  # Stop cooldown in seconds
@@ -183,6 +185,7 @@ def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
     print("Recording is done")
 
     STREAM.stop_stream()  # Stop and close the stream
+    STREAM.close()
     # stream.close()
     # pa.terminate()  # Destroy the PyAudio object
 

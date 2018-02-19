@@ -14,7 +14,6 @@ rate = 44100
 def callback():
     detector.terminate()
 
-    speech_to_text.init()
     frames = speech_to_text.record(rate = rate, ding = True)
     wav = speech_to_text.get_wav(frames, rate)[0]
     flac = speech_to_text.get_flac_linux(wav)

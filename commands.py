@@ -1,6 +1,6 @@
 #! /bin/python3
 # get the intent and do something with it.
-# You can also create modules with more complicated scripts and put them in a sepperate file. This will be more readable. 
+# You can also create modules with more complicated scripts and put them in a seperate file. This will be more readable.
 # Good luck!
 import datetime
 import text_to_speech
@@ -27,16 +27,18 @@ def play(text, female=False):
         text_to_speech.play(t)
 
 
-def record(gtext=True, ding=True, full=False):
-    if gtext:
+def record(text=True, ding=True, full=False):
+    if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
         f = stt.get_flac_linux(w)
-        text = stt.get_google(f, 44100, full=full)
-        print(text)
-        if not text:
+        ttext = stt.get_google(f, 44100, full=full)
+        print(ttext)
+        if not ttext:
             play("I did not understand.")
             record(ding, full)
+        else:
+            return ttext
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))

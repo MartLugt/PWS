@@ -30,7 +30,9 @@ class RingBuffer(object):
 
     def get(self):
         """Retrieves data from the beginning of buffer and clears it"""
+        print("PRINT BUF")
         tmp = bytes(bytearray(self._buf))
+        print("THAT WAS IT")
         self._buf.clear()
         return tmp
 
@@ -164,6 +166,10 @@ class HotwordDetector(object):
                 time.sleep(sleep_time)
                 continue
 
+            print("*********************** PRINTING DATA BUFFER **************************")
+            print(data)
+            print("+++++++++++++++++++++++          DONE        ++++++++++++++++++++++++++")
+
             ans = self.detector.RunDetection(data)
             if ans == -1:
                 logger.warning("Error initializing streams or reading audio data")
@@ -190,7 +196,6 @@ class HotwordDetector(object):
         self.stream_in.close()
         self.audio.terminate()
         self._running = False
-
 
     def stop(self):
         """
