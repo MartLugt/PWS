@@ -14,6 +14,7 @@ import pyaudio  # pyaudio for recording
 import requests
 import sys
 import text_to_speech
+import snowboydecoder
 
 # Set constants
 FORMAT = pyaudio.paInt16  # Audio bit depth
@@ -155,6 +156,8 @@ def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
     frames = []
     counter_threshold_stop = 0
     counter_threshold_start = 0
+
+    threshold = snowboydecoder.get_threshold()
 
     while True:
         buffer = STREAM.read(BUFFER_SIZE)
