@@ -92,7 +92,7 @@ def get_google(data, rate, language="en-US", full=False):
     response = requests.post(url, headers=headers, data=data)
     # Now parse it into the sentence with the best confidence
 
-    result_full = []
+    result_full = {}
     for line in response.text.split('\n'):
         if not line:
             continue
@@ -104,9 +104,9 @@ def get_google(data, rate, language="en-US", full=False):
     if full:
         return result_full
 
-    # if not isinstance(result_full, dict):
-    #    print(result_full)
-    #    raise ValueError
+    if not isinstance(result_full, dict):
+        print(result_full)
+        return False
 
     result_best = result_full["alternative"][0]
     if "confidence" in result_best:
