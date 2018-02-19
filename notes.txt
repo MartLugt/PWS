@@ -1,1 +1,1 @@
-get note
+get notes
