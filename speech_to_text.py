@@ -142,12 +142,12 @@ def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
 
     STREAM.start_stream()
 
-    print("First be silent, calibrating silence")
-    buffer = STREAM.read(int(rate / 2))
+    # print("First be silent, calibrating silence")
+    # buffer = STREAM.read(int(rate / 2))
 
-    threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
+    # threshold = audioop.rms(buffer, pa.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
 
-    print("We are now recording. Start talking for it to start.")
+    # print("We are now recording. Start talking for it to start.")
 
     if ding:
         text_to_speech.play_ding()

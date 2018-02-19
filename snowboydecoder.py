@@ -7,6 +7,10 @@ import time
 import wave
 import os
 import logging
+import pyaudio
+import audioop  # audio operations for checking volume of sound
+
+FORMAT = pyaudio.paInt16  # Audio bit depth
 
 logging.basicConfig()
 logger = logging.getLogger("snowboy")
@@ -16,6 +20,11 @@ TOP_DIR = os.path.dirname(os.path.abspath(__file__))
 RESOURCE_FILE = os.path.join(TOP_DIR, "resources/common.res")
 DETECT_DING = os.path.join(TOP_DIR, "resources/ding.wav")
 DETECT_DONG = os.path.join(TOP_DIR, "resources/dong.wav")
+
+threshold = 0
+
+def get_threshold():
+    return threshold
 
 
 class RingBuffer(object):
@@ -30,10 +39,10 @@ class RingBuffer(object):
 
     def get(self):
         """Retrieves data from the beginning of buffer and clears it"""
-        print("PRINT BUF")
+        # print("PRINT BUF")
         tmp = bytes(bytearray(self._buf))
-        print(tmp)
-        print("THAT WAS IT")
+        # print(tmp)
+        # print("THAT WAS IT")
         self._buf.clear()
         return tmp
 
@@ -167,9 +176,16 @@ class HotwordDetector(object):
                 time.sleep(sleep_time)
                 continue
 
-            print("*********************** PRINTING DATA BUFFER **************************")
-            print(data)
-            print("+++++++++++++++++++++++          DONE        ++++++++++++++++++++++++++")
+            # print("*********************** PRINTING DATA BUFFER **************************")
+            # print(data)
+            # print("+++++++++++++++++++++++          DONE        ++++++++++++++++++++++++++")
+
+            print("First be silent, calibrating silence")
+            buffer = data
+            global threshold
+            threshold = audioop.rms(buffer, self.audio.get_sample_size(FORMAT)) * 1.2  # threshold needs to be a bit bigger.
+
+            print("We are now recording. Start talking for it to start.")
 
             ans = self.detector.RunDetection(data)
             if ans == -1:
