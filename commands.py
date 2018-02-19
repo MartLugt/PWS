@@ -27,18 +27,18 @@ def play(text, female=False):
         text_to_speech.play(t)
 
 
-def record(gtext=True, ding=True, full=False):
-    if gtext:
+def record(text=True, ding=True, full=False):
+    if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
         f = stt.get_flac_linux(w)
-        text = stt.get_google(f, 44100, full=full)
-        print(text)
-        if not text:
+        ttext = stt.get_google(f, 44100, full=full)
+        print(ttext)
+        if not ttext:
             play("I did not understand.")
             record(ding, full)
         else:
-            return text
+            return ttext
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))
