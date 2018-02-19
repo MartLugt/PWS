@@ -15,8 +15,8 @@ def parse(text):
                "calendar": {"event": 2, "calendar": 1},
                "snowboy": {"snowboy": 1, "name": 2},
                "guess": {"guess": 0, "play": 1, "number": 1},
-               "make_note": {"note": 0, "make": 0},
-               "get_note": {"notes": 1, "note": 1, "get": 0}
+               "make_note": {"note": 1, "make": 2},
+               "get_note": {"notes": 0, "note": 1, "get": 2}
                }
 
     confidences = {}

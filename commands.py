@@ -304,10 +304,21 @@ def joke(text):
         play(lines[11])
 
 def make_note(text):
-    play("Note made")
+    text.replace("make", "")
+    text.replace("note", "")
+    if "a" in text:
+        text.replace("a", "")
+    notes = open("notes.txt", "w")
+    notes.write(text)
+    notes.close()
 
 def get_notes(text):
-    play("Got notes")
+    notes = open('notes.txt', 'r')
+#    lines = n.readlines()
+#    play(lines)
+    note = notes.read()
+    play(note)
+    n.close()
 
 def execute(intent, text = None):
     intent = intent[0]
@@ -329,5 +340,5 @@ def execute(intent, text = None):
         joke(text)
     elif intent == "get_notes":
         get_notes(text)
-    elif intent == "make_notes":
+    elif intent == "make_note":
         make_note(text)
