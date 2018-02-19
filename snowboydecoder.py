@@ -32,6 +32,7 @@ class RingBuffer(object):
         """Retrieves data from the beginning of buffer and clears it"""
         print("PRINT BUF")
         tmp = bytes(bytearray(self._buf))
+        print(tmp)
         print("THAT WAS IT")
         self._buf.clear()
         return tmp
