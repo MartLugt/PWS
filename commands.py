@@ -1,6 +1,6 @@
 #! /bin/python3
 # get the intent and do something with it.
-# You can also create modules with more complicated scripts and put them in a sepperate file. This will be more readable. 
+# You can also create modules with more complicated scripts and put them in a seperate file. This will be more readable.
 # Good luck!
 import datetime
 import text_to_speech
@@ -37,6 +37,8 @@ def record(gtext=True, ding=True, full=False):
         if not text:
             play("I did not understand.")
             record(ding, full)
+        else:
+            return text
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))
