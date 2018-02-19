@@ -19,6 +19,10 @@ def callback():
     flac = speech_to_text.get_flac_linux(wav)
     text = speech_to_text.get_google(flac, rate)
 
+    if not text:
+        commands.play("ur mom gay")
+        callback()
+
     intent = query_parser.parse(text)
     print(intent)
 
