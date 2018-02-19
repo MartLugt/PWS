@@ -92,7 +92,7 @@ def get_google(data, rate, language="en-US", full=False):
     response = requests.post(url, headers=headers, data=data)
     # Now parse it into the sentence with the best confidence
 
-    result_full = {}
+    result_full = []
     for line in response.text.split('\n'):
         if not line:
             continue
