@@ -185,7 +185,7 @@ class HotwordDetector(object):
             global threshold
             threshold = audioop.rms(buffer, self.audio.get_sample_size(FORMAT)) * 0.8  # threshold needs to be a bit smaller.
 
-            print("We are now recording. Start talking for it to start. TODO: FIX THIS SHIT")
+            print("We are now recording. Start talking for it to start.")
 
             ans = self.detector.RunDetection(data)
             if ans == -1:
