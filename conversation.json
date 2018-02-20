@@ -24,27 +24,5 @@
       "Would you like me to change my voice?",
       "I'm going to change my voice, is that okay?"
     ]
-  },
-  "rude": {
-    "dont_understand": [
-      "Hey stupid! Talk louder!",
-      "Stop talking shit you shitface!",
-      "You are mom homophile!"
-      ],
-    "moods": [
-      "At least I ain't as ugly as you",
-      "I hate you",
-      "ur mom gay",
-      "ur a fagot",
-      "AM GOING FUCK YOUR KILL MOM"
-    ],
-    "no_number": "Even Donald Trump knows that that isn't an integer!",
-    "no_number_guess": "Are you really as stupid as you look?",
-    "set_max_number": "Whats the maximum you cunt!",
-    "ok": [
-      "Sure, comming up!",
-      "Ok, here you go:",
-      "Here it is:"
-    ]
   }
 }

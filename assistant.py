@@ -23,6 +23,8 @@ def main():
     flac = speech_to_text.get_flac_linux(wav)
     text = speech_to_text.get_google(flac, rate)
 
+    print(text)
+
     if not text:
         commands.play(random.choice(conversation["dont_understand"]))
         main()
@@ -46,7 +48,7 @@ def detect():
 
     detector.start(detected_callback=callback, sleep_time=0.03)
 
-    
+
 detect()
 
 detector.terminate()
