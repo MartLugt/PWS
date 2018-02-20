@@ -31,6 +31,17 @@ def init(user):
         conversation = json.load(f)
 
 
+def change_voice(text):
+    global female
+    play(random.choice(conversation['change_voice']))
+    text = record()
+    if text.lower() == "yes":
+        if female:
+            female = False
+        else:
+            female = True
+        play("Okay")
+
 def play(text, female=False):
     if female:
         text_to_speech.play(text_to_speech.get_watson(text, female=True))
@@ -365,3 +376,5 @@ def execute(intent, text=None):
         make_note(text)
     elif intent == "urmom":
         urmom(text)
+    elif intent == "change_voice":
+        change_voice(text)
