@@ -43,7 +43,7 @@ def callback():
 
 def detect():
     global detector
-    detector = sb.HotwordDetector(model, sensitivity=0.7)
+    detector = sb.HotwordDetector(model, sensitivity=1)
     print("Listening...")
 
     detector.start(detected_callback=callback, sleep_time=0.03)
