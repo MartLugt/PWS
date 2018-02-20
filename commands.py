@@ -323,6 +323,9 @@ def get_notes(text):
     play(note)
     n.close()
 
+def urmom(text):
+    play("No you")
+
 def execute(intent, text = None):
     intent = intent[0]
     if intent == "get_time":
@@ -345,3 +348,5 @@ def execute(intent, text = None):
         get_notes(text)
     elif intent == "make_note":
         make_note(text)
+    elif intent == "urmom":
+        urmom(text)

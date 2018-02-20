@@ -10,11 +10,8 @@ import time
 model = "Jarvis.pmdl"
 rate = 44100
 
-
-def callback():
-    detector.terminate()
-
-    frames = speech_to_text.record(rate = rate, ding = True)
+def main():
+    frames = speech_to_text.record(rate=rate, ding=True)
     wav = speech_to_text.get_wav(frames, rate)[0]
     flac = speech_to_text.get_flac_linux(wav)
     text = speech_to_text.get_google(flac, rate)
@@ -27,6 +24,12 @@ def callback():
     print(intent)
 
     commands.execute(intent, text)
+
+
+def callback():
+    detector.terminate()
+
+    main()
 
 
 detector = sb.HotwordDetector(model, sensitivity=0.7)
