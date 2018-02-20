@@ -24,6 +24,12 @@
     "change_voice": [
       "Would you like me to change my voice?",
       "I'm going to change my voice, is that okay?"
+    ],
+    "shutdown": [
+      "See you next time, shutting down",
+      "Till next time",
+      "System is going to shut down",
+      "Goodbye, system is shutting down"
     ]
   }
 }

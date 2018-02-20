@@ -2,6 +2,7 @@
 # get the intent and do something with it.
 # You can also create modules with more complicated scripts and put them in a seperate file. This will be more readable.
 # Good luck!
+import sys
 import datetime
 import text_to_speech
 import time
@@ -65,6 +66,9 @@ def record(text=True, ding=True, full=False):
 
 # for example:
 
+def stop(text):
+    play(random.choice(conversation['shutdown']))
+    sys.exit(0)
 
 # This intent says the current time.
 def get_time(text):
@@ -263,7 +267,7 @@ def number_guess(text):
 
 
 def echo(text):
-    text.replace("echo", "")
+    text = text.lower().replace("echo", " ")
     play(text)
 
 def snowboy(text):
@@ -380,3 +384,5 @@ def execute(intent, text=None):
         change_voice(text)
     elif intent == "echo":
         echo(text)
+    elif intent == "stop":
+        stop(text)

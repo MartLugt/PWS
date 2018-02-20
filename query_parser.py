@@ -19,7 +19,8 @@ def parse(text):
                "get_note": {"notes": 1, "note": 1, "get": 0},
                "urmom": {"your": 1, "mom": 1, "gay": 0},
                "change_voice": {"change": 0, "voice": 0},
-               "echo": {"echo": 0}
+               "echo": {"echo": 0},
+               "stop": {"stop": 1, "shutdown": 1}
                }
 
     confidences = {}
