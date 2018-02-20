@@ -17,6 +17,7 @@ def parse(text):
                "guess": {"guess": 0, "play": 1, "number": 1},
                "make_note": {"note": 0, "make": 0},
                "get_note": {"notes": 1, "note": 1, "get": 0}
+               "urmom": {"your": 1, "mom": 1, "gay": 0}
                }
 
     confidences = {}
