@@ -6,7 +6,7 @@ import datetime
 import text_to_speech
 import speech_to_text as stt
 import requests
-from random import randint
+import random
 import pyaudio
 from io import BytesIO
 import wave
@@ -15,8 +15,19 @@ import icalendar
 from pytz import timezone
 from urllib.parse import urlencode
 
-dmood = {0: "I am very happy!", 1: "I am fine.", 2: "I am a bit tired...",
-         3: "I have a headache.", 4: "Please ask me some useful questions.", }
+with open('conversation.json', 'r') as f:
+    conversation = json.load(f)["nice"]
+
+
+def init(user):
+    file_name = user + "_data.json"
+    with open(file_name, 'r') as f:
+        global user_data
+        user_data = json.load(f)
+
+    with open("text.json", 'r') as f:
+        global conversation
+        conversation = json.load(f)
 
 
 def play(text, female=False):
@@ -35,7 +46,7 @@ def record(text=True, ding=True, full=False):
         ttext = stt.get_google(f, 44100, full=full)
         print(ttext)
         if not ttext:
-            play("I did not understand.")
+            play(random.choice(conversation["dont_understand"]))
             record(ding, full)
         else:
             return ttext
@@ -90,9 +101,12 @@ def get_news(text):
     r = requests.get(url)
     news = r.json()["articles"]
 
-    # play("OK, here you go:")
+    play(random.choice(conversation["ok"]))
 
     print(news)
+
+    if len(news) > 3:
+        news = news[:2]
 
     text = ""
     for article in news:
@@ -101,12 +115,11 @@ def get_news(text):
         text += article["title"] + ". " + article["description"] + ".,. "
         print(text)
 
-    play(text)
+    play(text, True)
 
 
 def get_mood(text):
-    mood = randint(0, 4)
-    text_to_speech.play(text_to_speech.get_watson(dmood[mood]))
+    play(random.choice(conversation["moods"]))
     print("Mood has been executed")
 
 
@@ -207,10 +220,7 @@ def calendar(text):
 def get_num(text):
     while True:
         res_full = record(full=True)
-        print(res_full)
         for res in res_full["alternative"]:
-            print(res)
-            print(res["transcript"])
             try:
                 return int(res["transcript"])
             except ValueError:
@@ -219,14 +229,14 @@ def get_num(text):
 
 
 def number_guess(text):
-    play("Set a number as maximum value")
-    maximum = get_num("That doesn't sound like a whole number to me...")
+    play(conversation["set_max_number"])
+    maximum = get_num(conversation["no_number"])
 
-    answer = randint(0, maximum)
-    play("Guess a number between zero and " + str(maximum))
+    answer = random.randint(1, maximum)
+    play("Guess a number between one and " + str(maximum))
 
     def game(turns):
-        guess = get_num("Please guess an integer")
+        guess = get_num(conversation["no_number_guess"])
         if int(guess) < int(answer):
             play("Guess higher!")
             turns = turns + 1
@@ -276,8 +286,9 @@ def snowboy(text):
     with open((name + ".pmdl"), "w") as outfile:
         outfile.write(response.content)
 
+
 def joke(text):
-    r = randint(0,5)
+    r = random.randint(0,5)
     j = open('jokes.txt')
     lines = j.readlines()
     if r == 0:
@@ -305,13 +316,16 @@ def joke(text):
         record()
         play(lines[11])
 
+
 def make_note(text):
     play("Note made")
+
 
 def get_notes(text):
     play("Got notes")
 
-def execute(intent, text = None):
+
+def execute(intent, text=None):
     intent = intent[0]
     if intent == "get_time":
         get_time(text)

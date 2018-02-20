@@ -1,0 +1,24 @@
+{
+  "nice": {
+    "dont_understand": [
+      "Sorry, I can't follow you.",
+      "Could you please repeat that?",
+      "I'm afraid I didn't catch that..."
+      ],
+    "moods": [
+      "I am very happy!",
+      "I am fine.",
+      "I am a bit tired...",
+      "I have a headache.",
+      "Please ask me some useful questions."
+    ],
+    "no_number": "Please choose an integer!",
+    "no_number_guess": "Please only guess integers!",
+    "set_max_number": "What should be the maximum value?",
+    "ok": [
+      "Sure, comming up!",
+      "Ok, here you go:",
+      "Here it is:"
+    ]
+  }
+}
