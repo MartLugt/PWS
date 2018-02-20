@@ -25,7 +25,7 @@ def main():
 
     print(text)
 
-    if not text:
+    if not isinstance(text, str):
         commands.play(random.choice(conversation["dont_understand"]))
         main()
 

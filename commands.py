@@ -42,6 +42,7 @@ def change_voice(text):
             female = True
         play("Okay")
 
+
 def play(text, female=False):
     text_to_speech.play(text_to_speech.get_watson(text, female))
 
@@ -265,6 +266,7 @@ def number_guess(text):
 def echo(text):
     text.replace("echo", "")
     play(text)
+
 
 def snowboy(text):
     token = "fe0506fb0b11122ed1e16582ea0ae4f18a438196"
