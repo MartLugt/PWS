@@ -49,6 +49,6 @@ def detect():
     detector.start(detected_callback=callback, sleep_time=0.03)
 
 
-detect()
+while True:
+    detect()
 
-detector.terminate()
