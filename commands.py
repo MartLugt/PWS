@@ -16,7 +16,7 @@ from pytz import timezone
 from urllib.parse import urlencode
 
 with open('conversation.json', 'r') as f:
-    conversation = json.load(f)["nice"]
+    conversation = json.load(f)["rude"]
 
 
 def init(user):
@@ -31,11 +31,7 @@ def init(user):
 
 
 def play(text, female=False):
-    if female:
-        text_to_speech.play(text_to_speech.get_watson(text, female=True))
-    else:
-        t = text_to_speech.get_watson(text)
-        text_to_speech.play(t)
+    text_to_speech.play(text_to_speech.get_watson(text, female))
 
 
 def record(text=True, ding=True, full=False):
@@ -106,13 +102,13 @@ def get_news(text):
     print(news)
 
     if len(news) > 3:
-        news = news[:2]
+        news = news[:3]
 
     text = ""
     for article in news:
         if article["description"] is None:
             article["description"] = ""
-        text += article["title"] + ". " + article["description"] + ".,. "
+        text += article["title"] + ". " + article["description"] + ". "
         print(text)
 
     play(text, True)
