@@ -29,7 +29,7 @@ def main():
         commands.play(random.choice(conversation["dont_understand"]))
         main()
 
-    intent = query_parser.parse(text)
+    intent = query_parser.parse(text.lower())
     print(intent)
 
     commands.execute(intent, text)
