@@ -25,7 +25,7 @@ def main():
 
     if not text:
         commands.play(random.choice(conversation["dont_understand"]))
-        callback()
+        main()
 
     intent = query_parser.parse(text)
     print(intent)
@@ -39,9 +39,14 @@ def callback():
     main()
 
 
-detector = sb.HotwordDetector(model, sensitivity=0.7)
-print("Listening...")
+def detect():
+    global detector
+    detector = sb.HotwordDetector(model, sensitivity=0.7)
+    print("Listening...")
 
-detector.start(detected_callback=callback, sleep_time=0.03)
+    detector.start(detected_callback=callback, sleep_time=0.03)
+
+    
+detect()
 
 detector.terminate()

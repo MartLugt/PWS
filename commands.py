@@ -336,15 +336,12 @@ def get_notes(text):
     play(note)
     n.close()
 
-<<<<<<< HEAD
 
-def execute(intent, text=None):
-=======
 def urmom(text):
     play("No you")
 
-def execute(intent, text = None):
->>>>>>> origin/rpi
+
+def execute(intent, text=None):
     intent = intent[0]
     if intent == "get_time":
         get_time(text)
