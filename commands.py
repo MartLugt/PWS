@@ -262,6 +262,10 @@ def number_guess(text):
     game(1)
 
 
+def echo(text):
+    text.replace("echo", "")
+    play(text)
+
 def snowboy(text):
     token = "fe0506fb0b11122ed1e16582ea0ae4f18a438196"
     # play("Sure! What should the name be?")
@@ -374,3 +378,5 @@ def execute(intent, text=None):
         urmom(text)
     elif intent == "change_voice":
         change_voice(text)
+    elif intent == "echo":
+        echo(text)
