@@ -133,7 +133,7 @@ def get_wit(data, language="en-US"):
     return r.text
 
 
-def record(rate=44100, ding=False, start_s=0.2, stop_s=0.75):
+def record(rate=44100, ding=False, start_s=0.2, stop_s=0.85):
     init()
     global STREAM
 
