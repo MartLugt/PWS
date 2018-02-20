@@ -4,6 +4,7 @@
 # Good luck!
 import datetime
 import text_to_speech
+import time
 import speech_to_text as stt
 import requests
 from random import randint
@@ -282,27 +283,27 @@ def joke(text):
     lines = j.readlines()
     if r == 0:
         play(lines[0])
-        record()
+        time.sleep(2.0)
         play(lines[1])
     elif r == 1:
         play(lines[2])
-        record()
+        time.sleep(2.0)
         play(lines[3])
     elif r == 2:
         play(lines[4])
-        record()
+        time.sleep(2.0)
         play(lines[5])
     elif r == 3:
         play(lines[6])
-        record()
+        time.sleep(2.0)
         play(lines[7])
     elif r == 4:
         play(lines[8])
-        record()
+        time.sleep(2.0)
         play(lines[9])
     elif r == 5:
         play(lines[10])
-        record()
+        time.sleep(2.0)
         play(lines[11])
 
 def make_note(text):
