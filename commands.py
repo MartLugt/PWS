@@ -16,7 +16,7 @@ from pytz import timezone
 from urllib.parse import urlencode
 
 with open('conversation.json', 'r') as f:
-    conversation = json.load(f)["rude"]
+    conversation = json.load(f)["nice"]
 
 
 def init(user):
