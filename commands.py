@@ -238,6 +238,8 @@ def get_num(text):
             except ValueError:
                 continue
         play(text)
+        time.sleep(1)
+
 
 #this is a game of guess the number
 def number_guess(text):
@@ -251,10 +253,12 @@ def number_guess(text):
         guess = get_num(conversation["no_number_guess"])
         if int(guess) < int(answer): #when guessed too low
             play("Guess higher")
+            time.sleep(1)
             turns = turns + 1
             game(turns)
         elif int(guess) > int(answer): #when guessed too high
             play("Guess lower")
+            time.sleep(1)
             turns = turns + 1
             game(turns)
         else:
@@ -265,6 +269,7 @@ def number_guess(text):
 
     game(1)
 
+
 #this command will repeat what the user said
 def echo(text):
     text = text.lower().replace("echo", " ")
@@ -273,10 +278,10 @@ def echo(text):
 
 def snowboy(text):
     token = "fe0506fb0b11122ed1e16582ea0ae4f18a438196"
-    # play("Sure! What should the name be?")
+    play(conversation["what_name"])
     name = record()
     print(name)
-    # play("Ok! The name is %s. Now please say this name after each beep." % name)
+    play("Ok! The name is %s. Now please say this name after each beep." % name)
 
     wav1 = record(text=False)
     wav2 = record(text=False)
@@ -346,8 +351,6 @@ def make_note(text):
 
 def get_notes(text):
     notes = open('notes.txt', 'r')
-#    lines = notes.readlines()
-#    play(lines)
     play(random.choice(conversation['notes']))
     play(notes.read())
     notes.close()
