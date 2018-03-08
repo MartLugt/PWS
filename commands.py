@@ -55,11 +55,11 @@ def record(text=True, ding=True, full=False):
         f = stt.get_flac_linux(w)
         ttext = stt.get_google(f, 44100, full=full)
         print(ttext)
-        if not ttext:
-            play(random.choice(conversation["dont_understand"]))
-            record(ding, full)
-        else:
-            return ttext
+        # if not ttext:
+        #     play(random.choice(conversation["dont_understand"]))
+        #     record(ding, full)
+
+        return ttext
     else:
         frames = stt.record(ding=ding)
         print(stt.get_wav(frames))
@@ -233,7 +233,7 @@ def calendar(text):
 
 def get_num(text):
     while True:
-        res_full = record(full=True);
+        res_full = record(full=True)
         if res_full is not None:
             for res in res_full["alternative"]:
                 try:

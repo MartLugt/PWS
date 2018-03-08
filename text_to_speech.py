@@ -4,7 +4,7 @@ import pyaudio
 import wave
 
 
-BUFFER_SIZE = 2048
+BUFFER_SIZE = 4096
 
 pa = pyaudio.PyAudio()
 
