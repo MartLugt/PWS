@@ -16,9 +16,9 @@ with open('conversation.json', 'r') as f:
     conversation = json.load(f)["nice"]
     print(conversation)
 
-with open('userdata.json', 'r') as f:
-    conversation = json.load(f)["nice"]
-    print(conversation)
+# with open('userdata.json', 'r') as f:
+#     conversation = json.load(f)["nice"]
+#     print(conversation)
 
 
 def main():
