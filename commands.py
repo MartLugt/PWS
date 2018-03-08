@@ -65,10 +65,12 @@ def record(text=True, ding=True, full=False):
         print(stt.get_wav(frames))
         return json.dumps(stt.get_wav(frames)[1].decode("utf-8"))
 
+
 # this command shuts down the system, giving the user a message beforehand.
 def stop(text):
     play(random.choice(conversation['shutdown']))
     sys.exit(0)
+
 
 # This intent says the current time.
 def get_time(text):
@@ -237,26 +239,27 @@ def get_num(text):
                 return int(res["transcript"])
             except ValueError:
                 continue
+        print(text)
         play(text)
         time.sleep(5)
 
 
-#this is a game of guess the number
+# this is a game of guess the number
 def number_guess(text):
-    play(conversation["set_max_number"]) #the user has to give a maximum
+    play(conversation["set_max_number"])  # the user has to give a maximum
     maximum = get_num(conversation["no_number"])
 
-    answer = random.randint(1, maximum) #a random number between 0 and max is picked
+    answer = random.randint(1, maximum)  # a random number between 0 and max is picked
     play("Guess a number between one and " + str(maximum))
 
     def game(turns):
         guess = get_num(conversation["no_number_guess"])
-        if int(guess) < int(answer): #when guessed too low
+        if int(guess) < int(answer):  # when guessed too low
             play("Guess higher")
             time.sleep(1)
             turns = turns + 1
             game(turns)
-        elif int(guess) > int(answer): #when guessed too high
+        elif int(guess) > int(answer):  # when guessed too high
             play("Guess lower")
             time.sleep(1)
             turns = turns + 1
@@ -270,7 +273,7 @@ def number_guess(text):
     game(1)
 
 
-#this command will repeat what the user said
+# this command will repeat what the user said
 def echo(text):
     text = text.lower().replace("echo", " ")
     play(text)
@@ -310,10 +313,10 @@ def snowboy(text):
 
 
 def joke(text):
-    r = random.randint(0,5)
+    r = random.randint(0, 5)
     j = open('jokes.txt')
     lines = j.readlines()
-    #a random joke with two lines will get picked
+    # a random joke with two lines will get picked
     if r == 0:
         play(lines[0])
         time.sleep(2.0)
@@ -356,11 +359,9 @@ def get_notes(text):
     play(note)
     notes.close()
 
-def twentyone(text):
-    play("Twenty-one")
 
 def execute(intent, text=None):
-    #this function is needed to execute the right command
+    # this function is needed to execute the right command
     intent = intent[0]
     if intent == "get_time":
         get_time(text)
