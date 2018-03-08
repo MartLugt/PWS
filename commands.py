@@ -336,22 +336,21 @@ def joke(text):
 
 
 def make_note(text):
-    text.replace("make", "")
-    text.replace("note", "")
-    if "a" in text:
-        text.replace("a", "")
+    text = text.replace("make", "")
+    text = text.replace("note", "")
     notes = open("notes.txt", "w")
     notes.write(text)
     notes.close()
+    play(random.choice(conversation['noted']))
 
 
 def get_notes(text):
     notes = open('notes.txt', 'r')
-#    lines = n.readlines()
+#    lines = notes.readlines()
 #    play(lines)
-    note = notes.read()
-    play(note)
-    n.close()
+    play(random.choice(conversation['notes']))
+    play(notes.read())
+    notes.close()
 
 
 def urmom(text):
@@ -379,7 +378,7 @@ def execute(intent, text=None):
         number_guess(text)
     elif intent == "joke":
         joke(text)
-    elif intent == "get_notes":
+    elif intent == "get_note":
         get_notes(text)
     elif intent == "make_note":
         make_note(text)

@@ -30,8 +30,18 @@
       "See you next time, shutting down",
       "Till next time, shutting down",
       "System is going to shut down",
-      "Goodbye, system is shutting down",
-      "No, I don't want to die"
+      "Goodbye, system is shutting down"
+    ],
+    "noted": [
+      "Noted that",
+      "Got it!",
+      "Okay, noted",
+      "Noted."
+    ],
+    "notes": [
+      "This is what you noted:",
+      "Your note:",
+      "Here is your note"
     ]
   }
 }
