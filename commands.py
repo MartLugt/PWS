@@ -238,7 +238,7 @@ def get_num(text):
             except ValueError:
                 continue
         play(text)
-        time.sleep(1)
+        time.sleep(5)
 
 
 #this is a game of guess the number
