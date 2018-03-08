@@ -233,35 +233,38 @@ def calendar(text):
 
 def get_num(text):
     while True:
-        res_full = record(full=True)
-        for res in res_full["alternative"]:
-            try:
-                return int(res["transcript"])
-            except ValueError:
-                continue
+        res_full = record(full=True);
+        if res_full is not None:
+            for res in res_full["alternative"]:
+                try:
+                    return int(res["transcript"])
+                except ValueError:
+                    continue
         print(text)
         play(text)
-        time.sleep(5)
+        time.sleep(2)
 
 
 # this is a game of guess the number
 def number_guess(text):
     play(conversation["set_max_number"])  # the user has to give a maximum
+    time.sleep(2)
     maximum = get_num(conversation["no_number"])
 
     answer = random.randint(1, maximum)  # a random number between 0 and max is picked
     play("Guess a number between one and " + str(maximum))
+    time.sleep(2)
 
     def game(turns):
         guess = get_num(conversation["no_number_guess"])
         if int(guess) < int(answer):  # when guessed too low
             play("Guess higher")
-            time.sleep(1)
+            time.sleep(2)
             turns = turns + 1
             game(turns)
         elif int(guess) > int(answer):  # when guessed too high
             play("Guess lower")
-            time.sleep(1)
+            time.sleep(2)
             turns = turns + 1
             game(turns)
         else:
