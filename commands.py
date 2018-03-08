@@ -48,16 +48,17 @@ def play(text, female=False):
     text_to_speech.play(text_to_speech.get_watson(text, female))
 
 
-def record(text=True, ding=True, full=False):
+def record(text=True, ding=True, full=False, check=True):
     if text:
         frames = stt.record(ding=ding)
         w = stt.get_wav(frames)[0]
         f = stt.get_flac_linux(w)
         ttext = stt.get_google(f, 44100, full=full)
         print(ttext)
-        # if not ttext:
-        #     play(random.choice(conversation["dont_understand"]))
-        #     record(ding, full)
+        if check:
+            if not ttext:
+                play(random.choice(conversation["dont_understand"]))
+                record(ding, full)
 
         return ttext
     else:
@@ -242,29 +243,27 @@ def get_num(text):
                     continue
         print(text)
         play(text)
-        time.sleep(2)
 
 
 # this is a game of guess the number
 def number_guess(text):
     play(conversation["set_max_number"])  # the user has to give a maximum
-    time.sleep(2)
     maximum = get_num(conversation["no_number"])
 
     answer = random.randint(1, maximum)  # a random number between 0 and max is picked
     play("Guess a number between one and " + str(maximum))
-    time.sleep(2)
+    time.sleep(1)
 
     def game(turns):
         guess = get_num(conversation["no_number_guess"])
         if int(guess) < int(answer):  # when guessed too low
             play("Guess higher")
-            time.sleep(2)
+            time.sleep(1)
             turns = turns + 1
             game(turns)
         elif int(guess) > int(answer):  # when guessed too high
             play("Guess lower")
-            time.sleep(2)
+            time.sleep(1)
             turns = turns + 1
             game(turns)
         else:
