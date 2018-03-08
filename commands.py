@@ -243,11 +243,13 @@ def get_num(text):
                     continue
         print(text)
         play(text)
+        time.sleep(1)
 
 
 # this is a game of guess the number
 def number_guess(text):
     play(conversation["set_max_number"])  # the user has to give a maximum
+    time.sleep(1)
     maximum = get_num(conversation["no_number"])
 
     answer = random.randint(1, maximum)  # a random number between 0 and max is picked
