@@ -339,17 +339,16 @@ def make_note(text):
     text = text.replace("make", "")
     text = text.replace("note", "")
     notes = open("notes.txt", "w")
+    play("Noted %s" %text)
     notes.write(text)
     notes.close()
-    play(random.choice(conversation['noted']))
 
 
 def get_notes(text):
     notes = open('notes.txt', 'r')
-#    lines = notes.readlines()
-#    play(lines)
     play(random.choice(conversation['notes']))
-    play(notes.read())
+    note = notes.read()
+    play(note)
     notes.close()
 
 
