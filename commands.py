@@ -351,10 +351,6 @@ def get_notes(text):
     play(note)
     notes.close()
 
-
-def urmom(text):
-    play("No you")
-
 def twentyone(text):
     play("Twenty-one")
 
