@@ -58,7 +58,7 @@ def record(text=True, ding=True, full=False, check=True):
         if check:
             if not ttext:
                 play(random.choice(conversation["dont_understand"]))
-                time.sleep(2)
+                time.sleep(2.5)
                 record(ding, full)
         return ttext
     else:
