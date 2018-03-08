@@ -251,18 +251,18 @@ def number_guess(text):
     def game(turns):
         guess = get_num(conversation["no_number_guess"])
         if int(guess) < int(answer):
-            play("Guess higher!")
+            play("Guess higher")
             turns = turns + 1
             game(turns)
         elif int(guess) > int(answer):
-            play("Guess lower!")
+            play("Guess lower")
             turns = turns + 1
             game(turns)
         else:
             if turns == 1:
-                play("Congratulations! You finished in " + str(turns) + " turn!")
+                play("Congratulations! You finished in " + str(turns) + " turn")
             else:
-                play("Congratulations! You finished in " + str(turns) + " turns!")
+                play("Congratulations! You finished in " + str(turns) + " turns")
 
     game(1)
 
@@ -357,6 +357,8 @@ def get_notes(text):
 def urmom(text):
     play("No you")
 
+def twentyone(text):
+    play("Twenty-one")
 
 def execute(intent, text=None):
     intent = intent[0]
@@ -380,11 +382,11 @@ def execute(intent, text=None):
         get_notes(text)
     elif intent == "make_note":
         make_note(text)
-    elif intent == "urmom":
-        urmom(text)
     elif intent == "change_voice":
         change_voice(text)
     elif intent == "echo":
         echo(text)
     elif intent == "stop":
         stop(text)
+    elif intent == "twentyone":
+        twentyone(text)

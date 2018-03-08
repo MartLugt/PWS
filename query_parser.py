@@ -13,14 +13,14 @@ def parse(text):
                "get_weather": {"weather": 1, "forecast":1},
                "get_news": {"news": 0, "BBC": 1, "sport": 2, "tech": 2, "business": 2},
                "calendar": {"event": 2, "calendar": 1},
-               "snowboy": {"snowboy": 1, "name": 2},
-               "guess": {"guess": 0, "play": 1, "number": 1},
-               "make_note": {"note": 0, "make": 0},
-               "get_note": {"notes": 1, "note": 1, "get": 0},
-               "urmom": {"your": 1, "mom": 1, "gay": 0},
+               "snowboy": {"snowboy": 1, "name": 3},
+               "guess": {"guess": 1, "play": 0, "number": 1},
+               "make_note": {"note": 1, "make": 1},
+               "get_note": {"notes": 1, "note": 1, "get": 1},
                "change_voice": {"change": 0, "voice": 0},
                "echo": {"echo": 0},
-               "stop": {"stop": 1, "shutdown": 1}
+               "stop": {"stop": 1, "shutdown": 1},
+               "twentyone": {"what": 2, "is": 2, "9 + 10": 0}
                }
 
     confidences = {}

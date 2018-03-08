@@ -4,14 +4,15 @@
       "Sorry, I can't follow you.",
       "Could you please repeat that?",
       "I'm afraid I didn't catch that.",
-      "ur mom homophile"
+      "I couldn't quite catch that."
     ],
     "moods": [
       "I am very happy!",
       "I am fine.",
       "I am a bit tired...",
       "I have a headache.",
-      "Please ask me some useful questions."
+      "Please ask me some useful questions.",
+      "I was fine until you stopped by"
     ],
     "no_number": "Please choose an integer!",
     "no_number_guess": "Please only guess integers!",
@@ -27,9 +28,10 @@
     ],
     "shutdown": [
       "See you next time, shutting down",
-      "Till next time",
+      "Till next time, shutting down",
       "System is going to shut down",
-      "Goodbye, system is shutting down"
+      "Goodbye, system is shutting down",
+      "No, I don't want to die"
     ]
   }
 }
