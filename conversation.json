@@ -17,6 +17,7 @@
     "no_number": "Please choose an integer!",
     "no_number_guess": "Please only guess integers!",
     "set_max_number": "What should be the maximum value?",
+    "what_name": "Sure! What should the name be?",
     "ok": [
       "Sure, comming up!",
       "Ok, here you go:",
