@@ -65,8 +65,7 @@ def record(text=True, ding=True, full=False):
         print(stt.get_wav(frames))
         return json.dumps(stt.get_wav(frames)[1].decode("utf-8"))
 
-# for example:
-
+# this command shuts down the system, giving the user a message beforehand.
 def stop(text):
     play(random.choice(conversation['shutdown']))
     sys.exit(0)
@@ -240,21 +239,21 @@ def get_num(text):
                 continue
         play(text)
 
-
+#this is a game of guess the number
 def number_guess(text):
-    play(conversation["set_max_number"])
+    play(conversation["set_max_number"]) #the user has to give a maximum
     maximum = get_num(conversation["no_number"])
 
-    answer = random.randint(1, maximum)
+    answer = random.randint(1, maximum) #a random number between 0 and max is picked
     play("Guess a number between one and " + str(maximum))
 
     def game(turns):
         guess = get_num(conversation["no_number_guess"])
-        if int(guess) < int(answer):
+        if int(guess) < int(answer): #when guessed too low
             play("Guess higher")
             turns = turns + 1
             game(turns)
-        elif int(guess) > int(answer):
+        elif int(guess) > int(answer): #when guessed too high
             play("Guess lower")
             turns = turns + 1
             game(turns)
@@ -266,7 +265,7 @@ def number_guess(text):
 
     game(1)
 
-
+#this command will repeat what the user said
 def echo(text):
     text = text.lower().replace("echo", " ")
     play(text)
@@ -309,6 +308,7 @@ def joke(text):
     r = random.randint(0,5)
     j = open('jokes.txt')
     lines = j.readlines()
+    #a random joke with two lines will get picked
     if r == 0:
         play(lines[0])
         time.sleep(2.0)
@@ -361,6 +361,7 @@ def twentyone(text):
     play("Twenty-one")
 
 def execute(intent, text=None):
+    #this function is needed to execute the right command
     intent = intent[0]
     if intent == "get_time":
         get_time(text)
