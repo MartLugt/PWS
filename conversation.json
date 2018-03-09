@@ -4,7 +4,8 @@
       "Sorry, I can't follow you.",
       "Could you please repeat that?",
       "I'm afraid I didn't catch that.",
-      "I couldn't quite catch that."
+      "I couldn't quite catch that.",
+      "Say that again, please."
     ],
     "moods": [
       "I am very happy!",
@@ -12,11 +13,14 @@
       "I am a bit tired...",
       "I have a headache.",
       "Please ask me some useful questions.",
-      "I was fine until you stopped by"
+      "I was fine until you stopped by..."
     ],
     "no_number": "Please choose an integer!",
     "no_number_guess": "Please only guess integers!",
-    "set_max_number": "What should be the maximum value?",
+    "set_max_number": [
+      "What should be the maximum value?",
+      "Set a number as maximum value.",
+    ],
     "what_name": "Sure! What should the name be?",
     "ok": [
       "Sure, comming up!",
@@ -30,13 +34,13 @@
     "shutdown": [
       "See you next time, shutting down",
       "Till next time, shutting down",
-      "System is going to shut down",
+      "Bye, system is shutting down",
       "Goodbye, system is shutting down"
     ],
     "notes": [
       "This is what you noted:",
       "Your note:",
-      "Here is your note"
+      "Here is your note:"
     ]
   }
 }
