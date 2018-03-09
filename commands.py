@@ -229,6 +229,7 @@ def calendar(text):
         else:
             text += ". "
 
+    print(text)
     play(text)
 
 
@@ -400,3 +401,5 @@ def execute(intent, text=None):
         stop(text)
     elif intent == "twentyone":
         twentyone(text)
+    elif intent == "calendar":
+        calendar(text)
