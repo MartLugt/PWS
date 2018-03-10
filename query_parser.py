@@ -20,7 +20,6 @@ def parse(text):
                "change_voice": {"change": 0, "voice": 0},
                "echo": {"echo": 0},
                "stop": {"stop": 1, "shutdown": 1},
-               "twentyone": {"what": 2, "is": 2, "9 + 10": 0}
                }
 
     confidences = {}
