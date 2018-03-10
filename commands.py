@@ -190,8 +190,8 @@ def calendar(text):
             if type(end) is datetime.date:
                 end = datetime.datetime.combine(end, datetime.time())
 
-            start = start.astimezone(timezone("Europe/Amsterdam"))
-            end = end.astimezone(timezone("Europe/Amsterdam"))
+            # start = start.astimezone(timezone("Europe/Amsterdam"))
+            # end = end.astimezone(timezone("Europe/Amsterdam"))
 
             event = {"summary": component.get("summary"),
                      "location": component.get("location"),
