@@ -326,32 +326,7 @@ def joke(text):
     play(lines[line])
     time.sleep(1.8)
     play(lines[line+1])
-#    """
-#    if r == 0:
-#        play(lines[0])
-#        time.sleep(2.0)
-#        play(lines[1])
-#    elif r == 1:
-#        play(lines[2])
-#        time.sleep(2.0)
-#        play(lines[3])
-#    elif r == 2:
-#        play(lines[4])
-#        time.sleep(2.0)
-#        play(lines[5])
-#    elif r == 3:
-#        play(lines[6])
-#        time.sleep(2.0)
-#        play(lines[7])
-#    elif r == 4:
-#        play(lines[8])
-#        time.sleep(2.0)
-#        play(lines[9])
-#    elif r == 5:
-#        play(lines[10])
-#        time.sleep(2.0)
-#        play(lines[11])
-#    """
+
 
 def make_note(text):
     text = text.replace("make", "")
