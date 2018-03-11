@@ -9,7 +9,7 @@ import time
 import json
 import random
 
-model = "snowboy.umdl"
+model = "jarvis.umdl"
 rate = 44100
 
 with open('conversation.json', 'r') as f:
