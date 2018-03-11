@@ -50,7 +50,7 @@ def play(text, female=False):
 
 def record(text=True, ding=True, full=False, check=True):
     if text:
-        frames = stt.record(ding=ding)
+        frames = stt.record(ding=ding, stop_s=0.5)
         w = stt.get_wav(frames)[0]
         f = stt.get_flac_linux(w)
         ttext = stt.get_google(f, 44100, full=full)
@@ -190,7 +190,7 @@ def calendar(text):
             if type(end) is datetime.date:
                 end = datetime.datetime.combine(end, datetime.time())
 
-            # start = start.astimezone(timezone("Europe/Amsterdam"))
+            # start = local_tz.localize(start_date)
             # end = end.astimezone(timezone("Europe/Amsterdam"))
 
             event = {"summary": component.get("summary"),
