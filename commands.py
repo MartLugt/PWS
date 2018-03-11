@@ -238,7 +238,7 @@ def calendar(text):
 def get_num(text):
     while True:
         res_full = record(full=True, check=False)
-        if res_full is not None or res_full:
+        if res_full is not None and res_full is not []:
             for res in res_full["alternative"]:
                 try:
                     return int(res["transcript"])
