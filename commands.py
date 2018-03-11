@@ -190,9 +190,11 @@ def calendar(text):
             if type(end) is datetime.date:
                 end = datetime.datetime.combine(end, datetime.time())
 
-            start = timezone("Europe/Amsterdam").localize(start)
+            if start.tzinfo is None:
+                start = timezone("Europe/Amsterdam").localize(start)
             # start = start.astimezone(timezone("Europe/Amsterdam"))
-            end = timezone("Europe/Amsterdam").localize(end)
+            if end.tzinfo is None:
+                end = timezone("Europe/Amsterdam").localize(end)
             # end = end.astimezone(timezone("Europe/Amsterdam"))
 
             event = {"summary": component.get("summary"),
