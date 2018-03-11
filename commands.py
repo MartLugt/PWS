@@ -208,7 +208,7 @@ def calendar(text):
             events.append(event)
 
     events = sorted(events, key=lambda k: k["start"])
-    print(events)
+    # print(events)
 
     upcomming_events = []
 
@@ -235,7 +235,7 @@ def calendar(text):
             else:
                 text += ". "
     else:
-        play(conversation["no_events"])
+        play(random.choice(conversation["no_events"]))
 
     print(text)
     play(text)
