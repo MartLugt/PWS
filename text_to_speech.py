@@ -28,8 +28,6 @@ def get_watson(text, female = False):
         )
 
     request = requests.get(url, params = params, auth=(username, password))
-    print(request.content)
-    print(request)
     return request
 
 

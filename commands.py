@@ -12,6 +12,7 @@ import random
 import pyaudio
 from io import BytesIO
 import wave
+from dateutil import relativedelta
 import json
 import icalendar
 from pytz import timezone
@@ -212,7 +213,7 @@ def calendar(text):
     upcomming_events = []
 
     for ev in events:
-        if ev["start"] >= datetime.datetime.now(tz=timezone("Europe/Amsterdam")):
+        if datetime.datetime.now(tz=timezone("Europe/Amsterdam")) <= ev["start"] <= datetime.date.today() + relativedelta.relativedelta(weeks=2):
             upcomming_events.append(ev)
             print(ev["start"], "True")
         else:
@@ -220,18 +221,21 @@ def calendar(text):
 
     text = ""
 
-    for ev in upcomming_events:
-        if ev["start"].strftime("%H:%M") == "00:00":
-            time = ev["start"].strftime("On %e %B")
-        else:
-            time = ev["start"].strftime("On %e %B, at %H:%M")
+    if len(upcomming_events) != 0:
+        for ev in upcomming_events:
+            if ev["start"].strftime("%H:%M") == "00:00":
+                time = ev["start"].strftime("On %e %B")
+            else:
+                time = ev["start"].strftime("On %e %B, at %H:%M")
 
-        text += "%s, you have %s" % (time, ev["summary"])
+            text += "%s, you have %s" % (time, ev["summary"])
 
-        if ev["location"] != "":
-            text += " at %s. " % ev["location"]
-        else:
-            text += ". "
+            if ev["location"] != "":
+                text += " at %s. " % ev["location"]
+            else:
+                text += ". "
+    else:
+        play(conversation["no_events"])
 
     play(text)
 
