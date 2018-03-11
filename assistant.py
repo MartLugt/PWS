@@ -9,7 +9,7 @@ import time
 import json
 import random
 
-model = "Jarvis.pmdl"
+model = "jarvis.umdl"
 rate = 44100
 
 with open('conversation.json', 'r') as f:
@@ -29,16 +29,15 @@ def main():
 
     print(text)
 
-    if not isinstance(text, str):
+    if isinstance(text, bool):
         commands.play(random.choice(conversation["dont_understand"]))
-        main()
+        time.sleep(2)
+        detect()
 
     intent = query_parser.parse(text.lower())
     print(intent)
 
     commands.execute(intent, text)
-
-
 
 
 def callback():
@@ -49,7 +48,7 @@ def callback():
 
 def detect():
     global detector
-    detector = sb.HotwordDetector(model, sensitivity=0.5)
+    detector = sb.HotwordDetector(model, sensitivity=0.7)
     print("Listening...")
 
     detector.start(detected_callback=callback, sleep_time=0.03)
