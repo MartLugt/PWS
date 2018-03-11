@@ -40,7 +40,11 @@
     "notes": [
       "This is what you noted:",
       "Your note:",
-      "Here is your note:"
+      "Here is your note"
+    ],
+    "no_events": [
+      "It doesn't look like you have anything to do in the near future!",
+      "No upcomming events."
     ]
   }
 }
