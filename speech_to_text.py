@@ -102,7 +102,7 @@ def get_google(data, rate, language="en-US", full=False):
             break
 
     if full:
-        if result_full is not []:
+        if isinstance(result_full, dict):
             return result_full
         else:
             return None
