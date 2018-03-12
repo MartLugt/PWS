@@ -19,7 +19,7 @@ def parse(text):
                "get_note": {"notes": 1, "note": 1, "get": 1, "what": 2},
                "change_voice": {"change": 1, "voice": 1},
                "echo": {"echo": 0},
-               "stop": {"stop": 1, "shut": 1},
+               "stop": {"stop": 1, "shut": 1, "kill": 1,},
                }
 
     confidences = {}
@@ -29,17 +29,17 @@ def parse(text):
         # populate confidence list.
         confidences[intent]= 0
 
-        print("\n" + intent)
+    #    print("\n" + intent)
 
         points = 0  # TODO: better names
         matches = 0
         zero_keywords = 0
-        print(zero_keywords)
+   #     print(zero_keywords)
         keyword_buffer = []
-        print(keyword_buffer)
+  #      print(keyword_buffer)
 
         for keyword in intents[intent]:
-            print(intent, keyword)
+#            print(intent, keyword)
             if keyword in text and keyword not in keyword_buffer:
                 points += intents[intent][keyword]
                 matches += 1
@@ -47,7 +47,7 @@ def parse(text):
 
             if intents[intent][keyword] == 0:
                 zero_keywords += 1
-        print("keywords with 0:", str(zero_keywords))
+ #       print("keywords with 0:", str(zero_keywords))
 
         if matches == 1 and points == 0:  # another weird shadow case
             confidences[intent] = 1.0
@@ -58,10 +58,10 @@ def parse(text):
 
         zeroes = 0
         for word in keyword_buffer:
-            print(word, intents[intent][word])
+#            print(word, intents[intent][word])
             if intents[intent][word] == 0:
                 zeroes += 1
-        print("zeroes:", str(zeroes))
+#        print("zeroes:", str(zeroes))
 
         if zeroes != zero_keywords:
             confidences.pop(intent, None)

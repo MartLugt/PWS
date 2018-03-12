@@ -31,24 +31,27 @@ def main():
 
     if isinstance(text, bool):
         commands.play(random.choice(conversation["dont_understand"]))
-        time.sleep(2)
+        time.sleep(1.5)
         detect()
-
+    
     intent = query_parser.parse(text.lower())
     print(intent)
-
+    
     commands.execute(intent, text)
 
 
 def callback():
     detector.terminate()
 
-    main()
-
+    try:
+        main()
+    except AttributeError:
+        print("Catched AttributeError")
+        detect()
 
 def detect():
     global detector
-    detector = sb.HotwordDetector(model, sensitivity=0.7)
+    detector = sb.HotwordDetector(model, sensitivity=0.6)
     print("Listening...")
 
     detector.start(detected_callback=callback, sleep_time=0.03)

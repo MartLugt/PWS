@@ -46,6 +46,7 @@ def change_voice(text):
 
 
 def play(text, female=False):
+    print("Saying: %s" % text)
     text_to_speech.play(text_to_speech.get_watson(text, female))
 
 
@@ -70,6 +71,9 @@ def record(text=True, ding=True, full=False, check=True):
 
 # this command shuts down the system, giving the user a message beforehand.
 def stop(text):
+    if "kill" in text.lower():
+        play(conversation["killed"])
+        sys.exit(0)
     play(random.choice(conversation['shutdown']))
     sys.exit(0)
 
