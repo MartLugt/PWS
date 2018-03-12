@@ -213,7 +213,7 @@ def calendar(text):
     upcomming_events = []
 
     for ev in events:
-        if datetime.datetime.now(tz=timezone("Europe/Amsterdam")) <= ev["start"] <= datetime.datetime.today() + relativedelta.relativedelta(weeks=2):
+        if datetime.datetime.now(tz=timezone("Europe/Amsterdam")) <= ev["start"] <= datetime.datetime.now(tz=timezone("Europe/Amsterdam")) + relativedelta.relativedelta(weeks=2):
             upcomming_events.append(ev)
             print(ev["start"], "True")
         else:
