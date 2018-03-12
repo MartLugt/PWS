@@ -339,6 +339,8 @@ def joke(text):
     time.sleep(1.8)
     play(lines[line+1])
 
+    play("Ha Ha Ha Ha")
+
 
 def make_note(text):
     text = text.replace("make", "")
