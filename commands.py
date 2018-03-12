@@ -353,6 +353,7 @@ def joke(text):
         play(lines[10])
         time.sleep(2.0)
         play(lines[11])
+    play("Ha Ha Ha Ha")
 
 
 def make_note(text):
